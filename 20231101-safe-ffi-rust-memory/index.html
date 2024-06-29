@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+<title>Safe Pointer Management With Rust | rustysec</title>
+
+
+
+<meta property="og:title" content="Safe Pointer Management With Rust">
+
+
+
+<meta name="author" content="russ">
+
+
+<meta property="og:locale" content="en_US">
+
+
+<meta name="description" content="this is my site">
+<meta property="og:description" content="this is my site">
+
+
+
+<link rel="canonical" href="https://rustysec.github.io/20231101-safe-ffi-rust-memory/">
+<meta property="og:url" content="https://rustysec.github.io/20231101-safe-ffi-rust-memory/">
+
+
+
+<meta property="og:site_name" content="rustysec" />
+
+
+
+  <meta property="og:image" content="https://rustysec.github.io/tale.png">
+  
+  
+
+
+
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2023-11-01T00:00:00+00:00">
+
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image"">
+  <meta property="twitter:image" content="https://rustysec.github.io/tale.png">
+
+
+
+  <meta property="twitter:title" content="Safe Pointer Management With Rust">
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<script type="application/ld+json">
+{
+  "author": {
+    "@type":"Person",
+	  "name":"russ",
+  },
+  "description": "this is my site",
+  "url": "https://rustysec.github.io/20231101-safe-ffi-rust-memory/",
+  "@context":"https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Safe Pointer Management With Rust"
+  
+    
+    
+      "datePublished":"2023-11-01T00:00:00+00:00",
+    
+    "mainEntityOfPage":{
+      "@type":"WebPage",
+      "@id":"https://rustysec.github.io/20231101-safe-ffi-rust-memory/"
+    },
+  
+}
+</script>
+
+  <link rel="stylesheet" href="https://rustysec.github.io/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="https://rustysec.github.io/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://rustysec.github.io/assets/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://rustysec.github.io/assets/apple-touch-icon.png">
+
+  
+
+  
+
+  
+  
+</head>
+
+<body>
+  
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="https://rustysec.github.io">
+        <h2 class="nav-title">rustysec</h2>
+      </a>
+      <ul>
+        
+          
+            <li><a href="https://rustysec.github.io">Posts</a></li>
+          
+            <li><a href="https://rustysec.github.io/tags">Tags</a></li>
+          
+        
+      </ul>
+    </div>
+  </nav>
+  
+
+  <main>
+    
+  <div class="post">
+  	<div class="post-info">
+  		<span>Written by</span> russ<br>
+  		
+  		<span>on&nbsp;</span><time datetime="2023-11-01">November  1, 2023</time>
+  	</div>
+  	<h1 class="post-title">Safe Pointer Management With Rust</h1>
+  	<div class="post-line"></div>
+  	<p>One of Rust's killer features is its amazing memory management system via the
+vaunted &quot;Borrow Checker&quot;.
+We can use this awesome sauce to enhance the ergonomics and safety of
+interoperating with other languages, as well!</p>
+<span id="continue-reading"></span>
+<p>In my professional life I spend a lot of time writing Rust code that interfaces
+with native APIs on Windows, MacOS, and Linux.
+What this means in practice is that I have to leave the comfortable confines of
+Rust and venture into the wild and untamed lands of C and C++.
+FFI with rust is easy to do but can be somewhat tricky to get &quot;right&quot;.</p>
+<h2 id="foreign-function-interface">Foreign Function Interface</h2>
+<p>The <a href="https://doc.rust-lang.org/nomicon/ffi.html">Rustonomicon</a>
+has a great section on FFI with examples on how to call C from Rust and the reverse.
+So what <em>exactly</em> is FFI? Well, simply put, it is the invocation of code outside
+the language you are currently working in.
+Because of this, occasionally memory is allocated by some other language and
+Rust is unable to leverage the Borrow Checker directly to free it when necessary.</p>
+<p>Here's an example of calling a C function that allocates memory that we (the
+developer) are now responsible for:</p>
+<pre data-lang="rust" style="background-color:#eff1f5;color:#4f5b66;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>windows_sys::Win32::{
+</span><span>    Foundation::{CloseHandle, </span><span style="color:#d08770;">FALSE</span><span>, </span><span style="color:#d08770;">HANDLE</span><span>},
+</span><span>    System::Threading::{OpenProcess, </span><span style="color:#d08770;">PROCESS_QUERY_LIMITED_INFORMATION</span><span>},
+</span><span>};
+</span><span>
+</span><span style="color:#b48ead;">unsafe </span><span>{
+</span><span>    </span><span style="color:#b48ead;">let</span><span> handle = OpenProcess(</span><span style="color:#d08770;">PROCESS_QUERY_LIMITED_INFORMATION</span><span>, </span><span style="color:#d08770;">FALSE</span><span>, pid);
+</span><span>
+</span><span>    </span><span style="color:#a7adba;">// use the handle ...
+</span><span>
+</span><span>    CloseHandle(handle);
+</span><span>}
+</span></code></pre>
+<p>Now this might work fine if the flow of the application is this simple.
+But what happens in the scenario where you need to pass this
+handle around or its' lifetime cannot be completely guaranteed?
+Foregoing the <code>CloseHandle</code> call will lead to a memory leak and, depending
+on your application, could have serious side effects.</p>
+<h2 id="rust-to-the-rescue">Rust to the Rescue</h2>
+<p>Under &quot;normal&quot; circumstances, Rust's Borrow Checker can map the lifetime
+of a piece of data <em>at compile time</em> and determine when it must be freed.
+In the case of this FFI call, that process handle is allocated somewhere
+and we are now responsible for that allocation's maintenance.</p>
+<p>One really nice and ergonomic way to deal with this is to create a Rust
+wrapper around the FFI type and leverage the languages features to help
+us manage the deallocation.</p>
+<pre data-lang="rust" style="background-color:#eff1f5;color:#4f5b66;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#bf616a;">derive</span><span>(Clone)]
+</span><span style="color:#b48ead;">struct </span><span>HandleWrapper(pub HANDLE);
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Drop </span><span style="color:#b48ead;">for </span><span>HandleWrapper {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">drop</span><span>(</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>) {
+</span><span>        </span><span style="color:#b48ead;">unsafe </span><span>{
+</span><span>            CloseHandle(</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0</span><span>);
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>We can now pass a <code>HandleWrapper</code> around in place of a <code>HANDLE</code> and be assured
+that when it goes out of scope the wrapped value will be freed appropriately.</p>
+<h2 id="minor-optimizations">Minor Optimizations</h2>
+<p>What if we want to limit the calls to <code>CloseHandle</code>? Our wrapper implements
+<code>Clone</code> which means we could end up with many instances of our handle. It
+isn't always optimal to call a close of free function repeatedly, especially
+after it has already been handled.</p>
+<p>We can solve this problem in a number of ways. We could use an internal explicit
+counter, or we can use some extra Rust goodness to help us out.</p>
+<pre data-lang="rust" style="background-color:#eff1f5;color:#4f5b66;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#bf616a;">derive</span><span>(Clone)]
+</span><span style="color:#b48ead;">struct </span><span>HandleWrapper(Rc&lt;HANDLE&gt;);
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>HandleWrapper {
+</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">new</span><span>(</span><span style="color:#bf616a;">handle</span><span>: HANDLE) -&gt; </span><span style="color:#b48ead;">Self </span><span>{
+</span><span>        HandleWrapper(Rc::new(handle))
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">as_ptr</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>) -&gt; </span><span style="color:#b48ead;">*const</span><span> HANDLE {
+</span><span>        </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0.</span><span style="color:#96b5b4;">as_ptr</span><span>()
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Drop </span><span style="color:#b48ead;">for </span><span>HandleWrapper {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">drop</span><span>(</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>) {
+</span><span>        </span><span style="color:#b48ead;">if </span><span>Rc::strong_count(&amp;</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0</span><span>) == </span><span style="color:#d08770;">1 </span><span>{
+</span><span>            </span><span style="color:#b48ead;">unsafe </span><span>{
+</span><span>                CloseHandle(*</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0.</span><span style="color:#96b5b4;">as_ref</span><span>());
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>If this structure needs to be <code>Send</code>/<code>Sync</code> we can replace some types here with
+things like <code>Arc</code>
+and even change <code>HANDLE</code> to something like <code>AtomicISize</code> and do some casting
+when needed.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Rust is such a great enhancement over other &quot;systems&quot; programming language.
+The safety and security the memory management model provides allows for a
+lot of pain free development. Corner cases like Foreign Function Interfaces
+can seem daunting at the outset, but any hurdle can end up being cleared
+using Rust's language features.</p>
+
+  </div>
+
+	
+
+  <div class="pagination">
+  	
+		<a href="#" class="top">Top</a>
+		
+  </div>
+
+  </main>
+
+  
+  <footer>
+    <span>&copy; <time datetime="2024-06-29T05:51:36.782640304+00:00">2023-2024</time> Russ Morris. Coding, Hacking, Musing.</span>
+  </footer>
+  
+</body>
+</html>
