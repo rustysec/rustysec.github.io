@@ -1,0 +1,461 @@
+<!doctype html>
+<html class="not-ready lg:text-base" lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    Safe Pointer Management With Rust - rustysec
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  <meta name="description" content="Safe Pointer Management With Rust" />
+  <meta name="author" content="rustysec" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Safe Pointer Management With Rust" />
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:description" content="Safe Pointer Management With Rust" />
+  <meta property="og:url" content="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20231101-safe-ffi-rust-memory&#x2F;" />
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <meta property="og:image" content="https://rustysec.github.io/static/profile.png" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://rustysec.github.io/main.css" />
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --bg-dark: #18181b;
+      --header: #e4e4e7;
+      --header-dark: #27272a;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://rustysec.github.io/icons/theme.svg" />
+
+  <!-- Math -->
+  
+  <!---->
+
+  <!-- Mermaid -->
+  
+  <!---->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://rustysec.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://rustysec.github.io/apple-touch-icon.png" />
+
+  <!-- Feeds -->
+  
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20231101-safe-ffi-rust-memory&#x2F;" />
+
+  <!-- Head inject -->
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://rustysec.github.io">rustysec</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/"
+            >Posts</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="tags"
+            >Tags</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/me/about"
+            >About</a
+          >
+        </li>
+        
+      </ul>
+      <!-- Header Nav inject -->
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <!-- Body Start inject -->
+    
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl break-words px-4 pb-16 pt-32 dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg"
+    >
+      
+<article>
+  <!-- Page Start inject -->
+  
+
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">Safe Pointer Management With Rust</h1>
+    <div class="text-sm antialiased opacity-60">
+  
+  <time>2023-11-01</time>
+  <span class="mx-1">&middot;</span>
+  <span>3min</span>
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <!-- Page Info inject -->
+  
+</div>
+
+  </header>
+
+  
+
+  <!-- TOC -->
+  <!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20231101-safe-ffi-rust-memory/#foreign-function-interface"
+            >Foreign Function Interface</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20231101-safe-ffi-rust-memory/#rust-to-the-rescue"
+            >Rust to the Rescue</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20231101-safe-ffi-rust-memory/#minor-optimizations"
+            >Minor Optimizations</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20231101-safe-ffi-rust-memory/#conclusion"
+            >Conclusion</a
+          >
+          
+        </li>
+        
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!---->
+
+  <!-- Content -->
+  <section><p>One of Rust's killer features is its amazing memory management system via the
+vaunted "Borrow Checker".
+We can use this awesome sauce to enhance the ergonomics and safety of
+interoperating with other languages, as well!</p>
+<span id="continue-reading"></span>
+<p>In my professional life I spend a lot of time writing Rust code that interfaces
+with native APIs on Windows, MacOS, and Linux.
+What this means in practice is that I have to leave the comfortable confines of
+Rust and venture into the wild and untamed lands of C and C++.
+FFI with rust is easy to do but can be somewhat tricky to get "right".</p>
+<h2 id="foreign-function-interface">Foreign Function Interface</h2>
+<p>The <a href="https://doc.rust-lang.org/nomicon/ffi.html">Rustonomicon</a>
+has a great section on FFI with examples on how to call C from Rust and the reverse.
+So what <em>exactly</em> is FFI? Well, simply put, it is the invocation of code outside
+the language you are currently working in.
+Because of this, occasionally memory is allocated by some other language and
+Rust is unable to leverage the Borrow Checker directly to free it when necessary.</p>
+<p>Here's an example of calling a C function that allocates memory that we (the
+developer) are now responsible for:</p>
+<pre data-lang="rust" style="background-color:#eff1f5;color:#4f5b66;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>windows_sys::Win32::{
+</span><span>    Foundation::{CloseHandle, </span><span style="color:#d08770;">FALSE</span><span>, </span><span style="color:#d08770;">HANDLE</span><span>},
+</span><span>    System::Threading::{OpenProcess, </span><span style="color:#d08770;">PROCESS_QUERY_LIMITED_INFORMATION</span><span>},
+</span><span>};
+</span><span>
+</span><span style="color:#b48ead;">unsafe </span><span>{
+</span><span>    </span><span style="color:#b48ead;">let</span><span> handle = OpenProcess(</span><span style="color:#d08770;">PROCESS_QUERY_LIMITED_INFORMATION</span><span>, </span><span style="color:#d08770;">FALSE</span><span>, pid);
+</span><span>
+</span><span>    </span><span style="color:#a7adba;">// use the handle ...
+</span><span>
+</span><span>    CloseHandle(handle);
+</span><span>}
+</span></code></pre>
+<p>Now this might work fine if the flow of the application is this simple.
+But what happens in the scenario where you need to pass this
+handle around or its' lifetime cannot be completely guaranteed?
+Foregoing the <code>CloseHandle</code> call will lead to a memory leak and, depending
+on your application, could have serious side effects.</p>
+<h2 id="rust-to-the-rescue">Rust to the Rescue</h2>
+<p>Under "normal" circumstances, Rust's Borrow Checker can map the lifetime
+of a piece of data <em>at compile time</em> and determine when it must be freed.
+In the case of this FFI call, that process handle is allocated somewhere
+and we are now responsible for that allocation's maintenance.</p>
+<p>One really nice and ergonomic way to deal with this is to create a Rust
+wrapper around the FFI type and leverage the languages features to help
+us manage the deallocation.</p>
+<pre data-lang="rust" style="background-color:#eff1f5;color:#4f5b66;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#bf616a;">derive</span><span>(Clone)]
+</span><span style="color:#b48ead;">struct </span><span>HandleWrapper(pub HANDLE);
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Drop </span><span style="color:#b48ead;">for </span><span>HandleWrapper {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">drop</span><span>(</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>) {
+</span><span>        </span><span style="color:#b48ead;">unsafe </span><span>{
+</span><span>            CloseHandle(</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0</span><span>);
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>We can now pass a <code>HandleWrapper</code> around in place of a <code>HANDLE</code> and be assured
+that when it goes out of scope the wrapped value will be freed appropriately.</p>
+<h2 id="minor-optimizations">Minor Optimizations</h2>
+<p>What if we want to limit the calls to <code>CloseHandle</code>? Our wrapper implements
+<code>Clone</code> which means we could end up with many instances of our handle. It
+isn't always optimal to call a close of free function repeatedly, especially
+after it has already been handled.</p>
+<p>We can solve this problem in a number of ways. We could use an internal explicit
+counter, or we can use some extra Rust goodness to help us out.</p>
+<pre data-lang="rust" style="background-color:#eff1f5;color:#4f5b66;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#bf616a;">derive</span><span>(Clone)]
+</span><span style="color:#b48ead;">struct </span><span>HandleWrapper(Rc&lt;HANDLE&gt;);
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>HandleWrapper {
+</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">new</span><span>(</span><span style="color:#bf616a;">handle</span><span>: HANDLE) -&gt; </span><span style="color:#b48ead;">Self </span><span>{
+</span><span>        HandleWrapper(Rc::new(handle))
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">as_ptr</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>) -&gt; </span><span style="color:#b48ead;">*const</span><span> HANDLE {
+</span><span>        </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0.</span><span style="color:#96b5b4;">as_ptr</span><span>()
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Drop </span><span style="color:#b48ead;">for </span><span>HandleWrapper {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">drop</span><span>(</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>) {
+</span><span>        </span><span style="color:#b48ead;">if </span><span>Rc::strong_count(&amp;</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0</span><span>) == </span><span style="color:#d08770;">1 </span><span>{
+</span><span>            </span><span style="color:#b48ead;">unsafe </span><span>{
+</span><span>                CloseHandle(*</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0.</span><span style="color:#96b5b4;">as_ref</span><span>());
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>If this structure needs to be <code>Send</code>/<code>Sync</code> we can replace some types here with
+things like <code>Arc</code>
+and even change <code>HANDLE</code> to something like <code>AtomicISize</code> and do some casting
+when needed.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Rust is such a great enhancement over other "systems" programming language.
+The safety and security the memory management model provides allows for a
+lot of pain free development. Corner cases like Foreign Function Interfaces
+can seem daunting at the outset, but any hurdle can end up being cleared
+using Rust's language features.</p>
+</section>
+
+  <hr />
+
+  <!-- Post Taxonomies -->
+  
+<footer class="mt-12 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mb-1.5 mr-1.5 rounded-lg px-5 py-1.5">Tags </span>
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/rust/"
+      >Rust</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/ffi/"
+      >FFI</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/windows/"
+      >Windows</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/linux/"
+      >Linux</a
+    >
+    
+  </div>
+  
+</footer>
+
+<!---->
+
+  <!-- Post Nav -->
+  
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  <!---->
+  
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240306-memory-injection-intro&#x2F;"
+    ><span>Introduction to Memory Injection</span><span class="ml-1.5">→</span></a
+  >
+  
+</nav>
+
+<!---->
+
+  <!-- Comment -->
+  
+
+  <!-- Page End inject -->
+  
+</article>
+
+    </main>
+
+    <footer class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+    <!---->
+    <!---->
+    &copy; 2025<!---->
+    
+    <a class="link" href="https://rustysec.github.io">
+      rustysec
+    </a>
+    
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <a class="link mr-6 lg:ml-6" href="https://www.getzola.org/" rel="noopener" target="_blank">
+      Powered by Zola
+    </a>
+    <a class="link" href="https://github.com/st1020/kita" rel="noopener" target="_blank">✎ Kita</a>
+  </div>
+  <!-- Footer inject -->
+  
+</footer>
+
+
+    <!-- Body End inject -->
+    
+  </body>
+</html>

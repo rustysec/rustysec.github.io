@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>rustysec - Memory</title>
+    <subtitle>coding, hacking, musing</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://rustysec.github.io/tags/memory/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://rustysec.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-03-06T00:00:00+00:00</updated>
+    <id>https://rustysec.github.io/tags/memory/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Introduction to Memory Injection</title>
+        <published>2024-03-06T00:00:00+00:00</published>
+        <updated>2024-03-06T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://rustysec.github.io/20240306-memory-injection-intro/"/>
+        <id>https://rustysec.github.io/20240306-memory-injection-intro/</id>
+        
+        <summary type="html">&lt;p&gt;As security software gets smarter and more effective, finding ways to hide
+from it have also evolved. There are a number of methods and tactics employed
+to achieve full memory residence, thus thwarting many detection mechanisms.
+Understanding these implementations is essential to developing solutions to the
+problem.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

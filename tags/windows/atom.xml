@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>rustysec - Windows</title>
+    <subtitle>coding, hacking, musing</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://rustysec.github.io/tags/windows/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://rustysec.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2023-11-01T00:00:00+00:00</updated>
+    <id>https://rustysec.github.io/tags/windows/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Safe Pointer Management With Rust</title>
+        <published>2023-11-01T00:00:00+00:00</published>
+        <updated>2023-11-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://rustysec.github.io/20231101-safe-ffi-rust-memory/"/>
+        <id>https://rustysec.github.io/20231101-safe-ffi-rust-memory/</id>
+        
+        <summary type="html">&lt;p&gt;One of Rust&#x27;s killer features is its amazing memory management system via the
+vaunted &quot;Borrow Checker&quot;.
+We can use this awesome sauce to enhance the ergonomics and safety of
+interoperating with other languages, as well!&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

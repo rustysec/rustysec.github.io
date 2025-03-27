@@ -1,0 +1,547 @@
+<!doctype html>
+<html class="not-ready lg:text-base" lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    NixOS and Back Again - rustysec
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  <meta name="description" content="NixOS and Back Again" />
+  <meta name="author" content="rustysec" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NixOS and Back Again" />
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:description" content="NixOS and Back Again" />
+  <meta property="og:url" content="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240610-nix-and-back-again&#x2F;" />
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <meta property="og:image" content="https://rustysec.github.io/static/profile.png" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://rustysec.github.io/main.css" />
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --bg-dark: #18181b;
+      --header: #e4e4e7;
+      --header-dark: #27272a;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://rustysec.github.io/icons/theme.svg" />
+
+  <!-- Math -->
+  
+  <!---->
+
+  <!-- Mermaid -->
+  
+  <!---->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://rustysec.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://rustysec.github.io/apple-touch-icon.png" />
+
+  <!-- Feeds -->
+  
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240610-nix-and-back-again&#x2F;" />
+
+  <!-- Head inject -->
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://rustysec.github.io">rustysec</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/"
+            >Posts</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="tags"
+            >Tags</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/me/about"
+            >About</a
+          >
+        </li>
+        
+      </ul>
+      <!-- Header Nav inject -->
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <!-- Body Start inject -->
+    
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl break-words px-4 pb-16 pt-32 dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg"
+    >
+      
+<article>
+  <!-- Page Start inject -->
+  
+
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">NixOS and Back Again</h1>
+    <div class="text-sm antialiased opacity-60">
+  
+  <time>2024-06-10</time>
+  <span class="mx-1">&middot;</span>
+  <span>9min</span>
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <!-- Page Info inject -->
+  
+</div>
+
+  </header>
+
+  
+
+  <!-- TOC -->
+  <!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#nix-os-is-different"
+            >Nix(OS) Is Different</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#nix-is-very-cool"
+            >Nix Is Very Cool</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#nix-is-very-hard"
+            >Nix Is Very Hard</a
+          >
+          
+          <ul>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#syntax"
+                >Syntax</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#docs-are-where-are-the-docs"
+                >Docs Are... Where are the docs?</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#there-is-no-right-way"
+                >There Is No &quot;Right Way&quot;</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#developing-is-great-but-also-harder"
+                >Developing Is Great, But Also Harder</a
+              >
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#and-that-s-the-issue"
+            >And That&#x27;s The Issue</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#so-what-s-linux-nerd-to-do"
+            >So What&#x27;s Linux Nerd To Do?</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240610-nix-and-back-again/#and-all-this-means"
+            >And All This Means...?</a
+          >
+          
+        </li>
+        
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!---->
+
+  <!-- Content -->
+  <section><p>Linux is great. I love Linux. One of the aspects I love the most is customization and the
+chance to really bend the whole system setup to exactly what I want. Now when I say I love
+"Linux" more specifics are needed.</p>
+<span id="continue-reading"></span>
+<p>There are a ton of distributions out there, and for much
+of my time in the linux world (1997-ish until now), many of them have been basically shipping
+their own spin on the same thing. The major differences really have come down to package
+manager, release philosophy, defaults, and theming. When you install most distributions the
+main learning curve is absorbing the defaults and deciphering the package manager syntax.</p>
+<h2 id="nix-os-is-different">Nix(OS) Is Different</h2>
+<p><strong>Disclaimer:</strong> For the sake of this little write up, I'm not going to distinguish too much between nix the
+package management system and NixOS the operating system/distribution. I'm also going to
+rephrase a lot of nomenclature and descriptions in a way I feel is more accessible to those
+who are not already familiar with nix.</p>
+<p>NixOS works on a declarative configuration file that defines your entire system (well, mostly).
+Changes to this file and a subsequent rebuild trigger packages being added and removed from the
+system, settings changed, etc. The resulting system is a snapshot known as a generation. This is
+actually a really killer feature, since every generation can be switched between pretty much at
+will. What this means is that making some wild changes to your system setup are virtually <em>guaranteed</em>
+to not bork it beyond recovery.</p>
+<p><strong>Caveat:</strong> A lot of user specific settings are better served being configured through "Home Manager",
+a user-land system that relies on the nix packager and syntax, but only affects the user home directory.
+Home Manager is well integrated with the nix system, meaning everything <em>can</em> be packaged together in
+one configuration file (or set of files) for simplicity or organization.</p>
+<h2 id="nix-is-very-cool">Nix Is Very Cool</h2>
+<p>Nix is incredibly powerful and useful, not only in theory or principal, but in practice. It means
+one configuration file can be pulled on to any number of systems and in minutes (literally) you have
+identical setups with all your tools configured exactly the same.</p>
+<p>The integration in configuration of applications is actually astonishing. The amount of work that has
+been invested in nix and home manager is a triumph of open source. Using a nix language server you
+can get configuration completion and type checking for tools like zsh and neovim (and gazillions more).
+In my experience, this makes configuration options really discoverable, and resources like
+<a href="https://www.mynixos.com">mynixos</a> are incredibly helpful.</p>
+<p>Home Manager with <a href="https://github.com/nix-community/nixvim">nixvim</a> is my single favorite neovim package
+manager I have ever used. (I'll cover more on that in a later post.)</p>
+<h2 id="nix-is-very-hard">Nix Is Very Hard</h2>
+<p>I'm going to point out some friction points I have encountered while running NixOS across several systems
+over 6 or so months. Of course, this is all just my experience and Is not meant to be overly negative toward
+nix or NixOS.</p>
+<h3 id="syntax">Syntax</h3>
+<p>I don't think any discussion about nix or nixos can be complete without discussing the syntax. This is a
+simple file, and perhaps it is not a great example of complexity, but it does demonstrate some basic syntax:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>{ inputs, ... }:
+</span><span>{
+</span><span>  imports = [
+</span><span>    ./hardware-configuration.nix
+</span><span>    ../../common.nix
+</span><span>    inputs.home-manager.nixosModules.default
+</span><span>  ];
+</span><span>  networking.hostName = &quot;nixos&quot;;
+</span><span>}
+</span></code></pre>
+<p>The real highlight is the functional purity of inputs and outputs. If you aren't familiar with functional
+programming principals at the start, getting syntax and functionality correct will be a steep climb. I think
+most experienced "Linux People" are used to doing things "the Linux way", mostly involving scripting languages
+or familiar configuration files. Nix, in large part, is a departure from this.</p>
+<h3 id="docs-are-where-are-the-docs">Docs Are... Where are the docs?</h3>
+<p>While there are some really good documentation resources, there are also enormous gaps. The modus operandi of the
+community is to scour github (or whatever) for examples of other configurations that "get close" to what you
+are trying to do, and go from there. This suddenly feels like the old joke that no one has ever written a Makefile
+from scratch, except the very first one.</p>
+<p>While, generally speaking, this seems to work out pretty well, I have found myself completely unable to figure out
+how to do something with very few resources to fall back on.</p>
+<h3 id="there-is-no-right-way">There Is No "Right Way"</h3>
+<p>In true Linux/Unix fashion, there isn't just one way to do anything. There are these things called flakes, you
+should use them! But also, you <em>might</em> not need them. They are really powerful and let you extend the capabilities
+of nix. However, if you are sticking to the happy path on software and settings, it is another layer of complexity.
+You can have home manager or nix download and package things, clone from git, fetch with http or ftp, etc. Which
+is the right method is sometimes mystifying and trial-and-error is your only solution.</p>
+<h3 id="developing-is-great-but-also-harder">Developing Is Great, But Also Harder</h3>
+<p>I write code all day long, and nix has some incredible tools to set up and maintain multiple development environments
+that can be used for different projects. There are dev shells, nix environments, and the aforementioned flakes. Which
+of these is the right tool for the job takes some experience to understand.</p>
+<p>For example, if you are trying to compile some code which needs the openssl development libraries, you <em>cannot</em> install
+these on the base nixos, by design. This has to do with reproducibility and the generations I mentioned earlier, versioning
+all of that would be quite difficult. What this means is that we need a development environment to provide the necessary
+files to get this done. There are a couple of ways to do this:</p>
+<p><strong>With <code>nix-env</code>:</strong></p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>nix-env -p openssl
+</span></code></pre>
+<p>will drop you right into a shell in your current directory that now has the openssl development files available. If they
+were not present before, they will be downloaded and stored.</p>
+<p>You can also use <strong>flakes</strong>:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>{
+</span><span>  description = &quot;Dev Shells&quot;;
+</span><span>
+</span><span>  inputs = {
+</span><span>    nixpkgs.url = &quot;nixpkgs/nixos-23.11&quot;;
+</span><span>    flake-utils.url = &quot;github:numtide/flake-utils&quot;;
+</span><span>  };
+</span><span>
+</span><span>  outputs = { self, nixpkgs, flake-utils }:
+</span><span>    flake-utils.lib.eachDefaultSystem (system:
+</span><span>      let
+</span><span>        pkgs = nixpkgs.legacyPackages.${system};
+</span><span>      in
+</span><span>      {
+</span><span>        devShells.linux = pkgs.mkShell {
+</span><span>          packages = with pkgs; [
+</span><span>            openssl
+</span><span>          ];
+</span><span>        };
+</span><span>      });
+</span><span>}
+</span></code></pre>
+<p>Isn't that clear as day? Now flakes allow you to do all kinds of neat things, like you can build the entire dev environment
+in the <code>flake.nix</code> file in your repository, and then when someone clones they can get <em>your exact toolchain versions</em> so you
+are guaranteed things will work.</p>
+<p>Where this comes off the rails a bit for me is when I need to do something kind of bonkers... like cross compiling from linux
+to macos, there is not a built in toolchain solution in nixos for that, so I would end up using <a href="https://github.com/cross-rs/cross">cross-rs</a>
+like I do everywhere else, somewhat missing out on some nix-y goodness. When I start reaching for other tooling outside the nix
+ecosystem it starts to feel a little more hacky and I start wonder if I'm doing it "wrong".</p>
+<p>What generally happens is that 50 times a day I completely forget to enter a dev shell and open neovim to do some work and suddenly
+LSP features are not working because there is no openssl on the base system and Cargo decided it could not compile and process
+the project.</p>
+<p>Is this a nix problem? <em>Absolutely not.</em> This is a <strong>me</strong> problem.</p>
+<h2 id="and-that-s-the-issue">And That's The Issue</h2>
+<p>Nix is awesome, all the principals are amazing and it has even got me out of some binds. But... and this is an important <em>but</em>...
+It introduces a lot of cognitive overhead when you are trying to <em>add</em> things to your workflow. It is such a unique departure from
+all I know about Linux-ing that everything feels fresh and new mixed with scary and uncertain.</p>
+<p>Sometimes I don't even know where to start looking for answers, and instead of being able to solve the problem with man pages or
+applying some acquired past knowledge, I'm just starting from zero. And that, to me, feels like too much work.</p>
+<p>All of these feelings are <em>my</em> feelings and don't speak to some objective truth about Nix or NixOS. It just simply means that <em>at this moment
+in time</em> I don't have the brain power to embrace this new way of doing <em>everything</em>.</p>
+<h2 id="so-what-s-linux-nerd-to-do">So What's Linux Nerd To Do?</h2>
+<p>Well my first plan was to just jump to another distro and continue using Home Manager to port my configurations around. However,
+HM still requires a working Nix installation and I immediately ran into all kinds of local conflicts when I attempted to set it up
+on a Void machine. Neovim was freaking out and things were just total chaos. In an unrelated endeavour, I <em>had</em> home manager running
+on my Macbook and something caused that installation to break within 24 hours of my other issues and it all just felt like a sign.</p>
+<p>I decided to spend an evening or two ripping my configurations out of home manager and going back to the old dotfiles repo. I also
+started writing some setup and install scripts for my common used distros (Void, Tumbleweed, and Debian) to recreate the Nix+HM
+experience.</p>
+<p>Is it the same? <em>Not at all.</em> Is it messy and dirty and gross? <em>Of course.</em> Is it Wonderful in its own Linux way? <em>You bet.</em></p>
+<h2 id="and-all-this-means">And All This Means...?</h2>
+<p>Nothing, really. I gave NixOS a lot of run and it just didn't seem like the right fit <em>for me</em> at <em>this point</em> in my life. I have too
+many other responsibilities and Nix felt like I was going back to school. That being said, I do <em>firmly</em> believe that some sort of system
+<em>like nix</em> is probably the Linux of the future. I am not at all certain if that Future Linux is <em>nix</em> in the current form. With projects
+like Fedora Silverblue and OpenSuse MicroOS, the idea of atomic, reproducible, immutable, etc etc is starting to take hold. All of these
+projects have differences, but at their core it feels like we are all searching for a way to configure our systems in a sane and efficient
+manner. Seeing which of these ultimately wins the hearts and minds of users should be fascinating.</p>
+<p>There is so much amazing work that has gone into the nix ecosystem that I am sure it will thrive for a long time. I continue to have my
+eye on the nix world and track what is happening, but over here, I'm just rocking a traditional Linux environment.</p>
+</section>
+
+  <hr />
+
+  <!-- Post Taxonomies -->
+  
+<footer class="mt-12 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mb-1.5 mr-1.5 rounded-lg px-5 py-1.5">Tags </span>
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/linux/"
+      >Linux</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/nix/"
+      >Nix</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/nixos/"
+      >NixOS</a
+    >
+    
+  </div>
+  
+</footer>
+
+<!---->
+
+  <!-- Post Nav -->
+  
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  
+  <a
+    class="block-hover-mask flex min-w-[50%] grow items-center rounded-l-md p-6 pr-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240306-memory-injection-intro&#x2F;"
+    ><span class="mr-1.5">←</span><span>Introduction to Memory Injection</span></a
+  >
+  <!---->
+  
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240626-atomic-fedora-with-niri&#x2F;"
+    ><span>Atomic Fedora with Niri</span><span class="ml-1.5">→</span></a
+  >
+  
+</nav>
+
+<!---->
+
+  <!-- Comment -->
+  
+
+  <!-- Page End inject -->
+  
+</article>
+
+    </main>
+
+    <footer class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+    <!---->
+    <!---->
+    &copy; 2025<!---->
+    
+    <a class="link" href="https://rustysec.github.io">
+      rustysec
+    </a>
+    
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <a class="link mr-6 lg:ml-6" href="https://www.getzola.org/" rel="noopener" target="_blank">
+      Powered by Zola
+    </a>
+    <a class="link" href="https://github.com/st1020/kita" rel="noopener" target="_blank">✎ Kita</a>
+  </div>
+  <!-- Footer inject -->
+  
+</footer>
+
+
+    <!-- Body End inject -->
+    
+  </body>
+</html>

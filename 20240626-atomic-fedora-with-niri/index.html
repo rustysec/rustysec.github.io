@@ -1,0 +1,510 @@
+<!doctype html>
+<html class="not-ready lg:text-base" lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    Atomic Fedora with Niri - rustysec
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  <meta name="description" content="Atomic Fedora with Niri" />
+  <meta name="author" content="rustysec" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Atomic Fedora with Niri" />
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:description" content="Atomic Fedora with Niri" />
+  <meta property="og:url" content="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240626-atomic-fedora-with-niri&#x2F;" />
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <meta property="og:image" content="https://rustysec.github.io/static/profile.png" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://rustysec.github.io/main.css" />
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --bg-dark: #18181b;
+      --header: #e4e4e7;
+      --header-dark: #27272a;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://rustysec.github.io/icons/theme.svg" />
+
+  <!-- Math -->
+  
+  <!---->
+
+  <!-- Mermaid -->
+  
+  <!---->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://rustysec.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://rustysec.github.io/apple-touch-icon.png" />
+
+  <!-- Feeds -->
+  
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240626-atomic-fedora-with-niri&#x2F;" />
+
+  <!-- Head inject -->
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://rustysec.github.io">rustysec</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/"
+            >Posts</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="tags"
+            >Tags</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/me/about"
+            >About</a
+          >
+        </li>
+        
+      </ul>
+      <!-- Header Nav inject -->
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <!-- Body Start inject -->
+    
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl break-words px-4 pb-16 pt-32 dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg"
+    >
+      
+<article>
+  <!-- Page Start inject -->
+  
+
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">Atomic Fedora with Niri</h1>
+    <div class="text-sm antialiased opacity-60">
+  
+  <time>2024-06-26</time>
+  <span class="mx-1">&middot;</span>
+  <span>6min</span>
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <!-- Page Info inject -->
+  
+</div>
+
+  </header>
+
+  
+
+  <!-- TOC -->
+  <!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240626-atomic-fedora-with-niri/#update-2024-10-17"
+            >Update 2024-10-17</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240626-atomic-fedora-with-niri/#quick-foundational-aside"
+            >Quick Foundational Aside</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240626-atomic-fedora-with-niri/#customization"
+            >Customization</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240626-atomic-fedora-with-niri/#niri-setup"
+            >Niri Setup</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240626-atomic-fedora-with-niri/#pod-ception"
+            >Pod-ception</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://rustysec.github.io/20240626-atomic-fedora-with-niri/#there-you-have-it"
+            >There you have it</a
+          >
+          
+        </li>
+        
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!---->
+
+  <!-- Content -->
+  <section><p>Atomic linux distributions promise a lot for the future of the operating system.
+Security, stability, ease up updates, testability, reproducibility, etc. These
+projects achieve these benefits by reducing the churn on the base system and nudging
+the user towards more sanboxed solutions for their apps. An oft perceived downside
+of this architecture is limited customization options.</p>
+<span id="continue-reading"></span>
+<p>I wrote a post about my <a href="https://rustysec.github.io/20240610-nix-and-back-again/">journey with Nix</a> and thought it
+would be a fun adventure to explore some other non-traditional Linux environments. This
+also coincides with my adoption of an awesome new window manager project, <a href="https://github.com/yalter/niri">Niri</a>!</p>
+<h3 id="update-2024-10-17">Update 2024-10-17</h3>
+<p><em>While this was a fun adventure, it turns out there is a Niri COPR now!</em></p>
+<pre data-lang="shell" style="background-color:#eff1f5;color:#4f5b66;" class="language-shell "><code class="language-shell" data-lang="shell"><span>wget https://copr.fedorainfracloud.org/coprs/yalter/niri/repo/fedora-$(rpm -E %fedora)/yalter-niri-fedora-$(rpm -E %fedora).repo \
+</span><span>    -O /etc/yum.repos.d/_copr_yalter-niri.repo
+</span><span>rpm-ostree install niri
+</span></code></pre>
+<h2 id="quick-foundational-aside">Quick Foundational Aside</h2>
+<p>Before getting too far, I want to touch on what exactly an atomic system is.
+In the most simple of terms, we can think of an atomic OS as one in which the entire
+system is maintained as one "image", or "generation", or "layer"... Whatever mental model
+works for you. When an update happens, the entire image is laid down to replace the last one.
+Generally, this happens in an A-B model where the new base is laid down next to the old,
+and you switch into it after a reboot. This allows <em>everything</em> to be replaced at once,
+eliminating any conflicts (looking at you, <em>python</em>), while also facilitating rollbacks.</p>
+<p>Now, I don't mean to confuse anyone with these terms as they actually have
+meaning depending on what distribution you are using, I'm not using any specific system's
+terminology here, just a purely vendor-agnostic description.</p>
+<p>So how does this play out in real life? Well (generally) you have a base layer that is
+placed on the system. This is all the packages and files needed to make the system start up
+and give you the desired experience. In the case of
+<a href="https://fedoraproject.org/atomic-desktops/silverblue/">Fedora Silverblue</a>
+or
+<a href="https://aeondesktop.github.io/">OpenSUSE AEON</a>
+this essentially boils down to a base Gnome experience with packages and configurations to
+deliver a nice and usable system for the end user.</p>
+<p><strong>Disclaimer: Fedora-isms incoming</strong></p>
+<p>"What about MyFavoriteApp???" you ask? Well that's where solutions like <a href="https://flatpak.org">Flatpak</a>
+come into play. This allows a platform independent mechanism for installing, updating, and
+launching apps. Containerized apps don't rely on system dependencies, thus they can be used
+freely with a very minimal set of actual packages installed.</p>
+<p>"But I need my developer tools!!!" you say? Toolbox has your back. Just <code>toolbox enter</code> and boom,
+you have a mutable containerized shell where you can install anything you want and it is well
+integrated with your home directory and desktop environment.</p>
+<h2 id="customization">Customization</h2>
+<p>Of course not everything you need to customize your experience can be handled through flatpak and
+toolbox (or distrobox, if you're using something other than fedora).</p>
+<p>Enter the layers!</p>
+<p>Atomic systems provide the ability to extend the base image by adding layers. What this means is that
+when you perform an update, the base image is rolled out and whatever additional layers you have
+chosen are then applied on top. This helps maintain the integrity of the system and gives you an "as
+fresh as possible" experience on each generation of your system.</p>
+<h2 id="niri-setup">Niri Setup</h2>
+<p>Now that we have the basics in place, it's time to make this thing our own.</p>
+<p>Niri is a scrolling, tiling, very awesome wayland compositor, so to start this adventure I chose to
+roll out the Fedora <a href="https://fedoraproject.org/atomic-desktops/sway/">Sericea</a> or "Sway Atomic" image.
+This has a lot of the minimal configs and packages you would expect from a window manager.
+The install essentially proceeds as any other Fedora install, and in the end we end up in a pretty basic
+sway environment.</p>
+<p>Next I decided to layer in some system level tools that I need:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>sudo rpm-ostree install -y alacritty breeze-cursor-theme \
+</span><span>    breeze-icon-theme fuzzel libadwaita \
+</span><span>    mako mate-polkit neovim papirus-icon-theme
+</span><span>    power-profiles-daemon qemu source-foundry-hack-fonts \
+</span><span>    tmux virt-manager zsh
+</span></code></pre>
+<p>I keep my dotfiles in github and have a script that links them all to the appropriate XDG folders,
+and that process doesn't change at all.</p>
+<p>So now I need to actually compile Niri, and we don't want to install all that tooling on the base system
+(the more layers the more pollution, and the longer updates will take).</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>toolbox enter
+</span></code></pre>
+<p>Once inside toolbox, we can get down to business:</p>
+<p>Install all the prerequisites:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>sudo dnf install -y dnf5
+</span><span>
+</span><span>sudo dnf5 install -y gcc libudev-devel libgbm-devel \
+</span><span>libxkbcommon-devel wayland-devel libinput-devel \
+</span><span>dbus-devel systemd-devel libseat-devel pipewire-devel \
+</span><span>pango-devel cairo-gobject-devel clang git
+</span><span>
+</span><span>curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</span></code></pre>
+<p>Build Niri:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>git clone https://github.com/yalter/niri
+</span><span>cd niri
+</span><span>cargo build --release
+</span></code></pre>
+<p>Once built, we need to drop out of toolbox to continue installation. Toolbox is sandboxed
+away from your main running system so it only has access to the home directory.
+Here we have to make some minor changes to the install instructions, since the base OS is technically
+"immutable", we have to use the alternate directories which are then merged during boot:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>sudo mkdir -p /usr/local/share/wayland-sessions
+</span><span>sudo mkdir -p /usr/local/share/xdg-desktop-portal
+</span><span>sudo mkdir -p /usr/local/lib/systemd/user
+</span><span>
+</span><span>sudo cp target/release/niri /usr/local/bin
+</span><span>sudo cp resources/niri-session /usr/local/bin
+</span><span>sudo cp resources/niri.desktop /usr/local/share/wayland-sessions
+</span><span>sudo cp resources/niri-portals.conf /usr/local/share/xdg-desktop-portal
+</span><span>sudo cp resources/niri.service /usr/local/lib/systemd/user
+</span><span>sudo cp resources/niri-shutdown.target /usr/local/lib/systemd/user
+</span></code></pre>
+<p><em>Edit 2024-07-23</em>: Fixed the files/folder names above. Additionally, the paths in some of these files will
+need to be updated to reflect the atomic directory structure. For example, <code>/usr/bin/niri-session</code> becomes
+<code>/usr/local/bin/niri-session</code>.</p>
+<p>By default, Sericea/Sway Atomic uses SDDM, when you restart the system you will now be able to
+choose "Niri" as your session and voila, magic.</p>
+<h2 id="pod-ception">Pod-ception</h2>
+<p>One last bit of developer setup I needed to work around is my use of <a href="https://github.com/cross-rs/cross">cross-rs</a>
+for cross compilation. This requires access to podman (or docker) so it can orchestrate building
+and running container workloads. It also requires rust tooling to be available which, if you remember
+from earlier, we installed via <code>rustup</code> so the binaries are in the home directory, totally accessible to
+both the toolbox and system environments.
+My solution here was to enable the podman socket activation in the OS:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>systemctl --user enable --now podman.socket
+</span></code></pre>
+<p>Then install <code>podman-remote</code> inside toolbox:</p>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>sudo dnf5 install -y podman-remote
+</span><span>ln -s `which podman-remote` ~/.local/bin/podman
+</span></code></pre>
+<p>Now this allows me to build my cross containers inside <code>toolbox</code> with no issues.</p>
+<h2 id="there-you-have-it">There you have it</h2>
+<p>That wasn't so hard, right? Now you have a super simple and stable base OS complete with atomic
+updating and rollbacks. The only minor diversion here is that we wanted a hot-off-the-presses
+compositor/window manager without using a supported layer.</p>
+<p>I think this goes to show that customization and atomic being mutually exclusive is almost entirely
+a myth. The facts are that it is <em>different</em> than a traditional environment, but most definitely
+not incompatible.</p>
+</section>
+
+  <hr />
+
+  <!-- Post Taxonomies -->
+  
+<footer class="mt-12 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mb-1.5 mr-1.5 rounded-lg px-5 py-1.5">Tags </span>
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/linux/"
+      >Linux</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/atomic/"
+      >Atomic</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/fedora/"
+      >Fedora</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/niri/"
+      >Niri</a
+    >
+    
+  </div>
+  
+</footer>
+
+<!---->
+
+  <!-- Post Nav -->
+  
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  
+  <a
+    class="block-hover-mask flex min-w-[50%] grow items-center rounded-l-md p-6 pr-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240610-nix-and-back-again&#x2F;"
+    ><span class="mr-1.5">←</span><span>NixOS and Back Again</span></a
+  >
+  <!---->
+  
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20250321-closing-a-chapter&#x2F;"
+    ><span>Closing a Chapter</span><span class="ml-1.5">→</span></a
+  >
+  
+</nav>
+
+<!---->
+
+  <!-- Comment -->
+  
+
+  <!-- Page End inject -->
+  
+</article>
+
+    </main>
+
+    <footer class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+    <!---->
+    <!---->
+    &copy; 2025<!---->
+    
+    <a class="link" href="https://rustysec.github.io">
+      rustysec
+    </a>
+    
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <a class="link mr-6 lg:ml-6" href="https://www.getzola.org/" rel="noopener" target="_blank">
+      Powered by Zola
+    </a>
+    <a class="link" href="https://github.com/st1020/kita" rel="noopener" target="_blank">✎ Kita</a>
+  </div>
+  <!-- Footer inject -->
+  
+</footer>
+
+
+    <!-- Body End inject -->
+    
+  </body>
+</html>

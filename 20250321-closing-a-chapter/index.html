@@ -1,0 +1,358 @@
+<!doctype html>
+<html class="not-ready lg:text-base" lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    Closing a Chapter - rustysec
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  <meta name="description" content="Closing a Chapter" />
+  <meta name="author" content="rustysec" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Closing a Chapter" />
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:description" content="Closing a Chapter" />
+  <meta property="og:url" content="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20250321-closing-a-chapter&#x2F;" />
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <meta property="og:image" content="https://rustysec.github.io/static/profile.png" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://rustysec.github.io/main.css" />
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --bg-dark: #18181b;
+      --header: #e4e4e7;
+      --header-dark: #27272a;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://rustysec.github.io/icons/theme.svg" />
+
+  <!-- Math -->
+  
+  <!---->
+
+  <!-- Mermaid -->
+  
+  <!---->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://rustysec.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://rustysec.github.io/apple-touch-icon.png" />
+
+  <!-- Feeds -->
+  
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20250321-closing-a-chapter&#x2F;" />
+
+  <!-- Head inject -->
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://rustysec.github.io">rustysec</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/"
+            >Posts</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="tags"
+            >Tags</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="/me/about"
+            >About</a
+          >
+        </li>
+        
+      </ul>
+      <!-- Header Nav inject -->
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <!-- Body Start inject -->
+    
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl break-words px-4 pb-16 pt-32 dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg"
+    >
+      
+<article>
+  <!-- Page Start inject -->
+  
+
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">Closing a Chapter</h1>
+    <div class="text-sm antialiased opacity-60">
+  
+  <time>2025-03-21</time>
+  <span class="mx-1">&middot;</span>
+  <span>3min</span>
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <!-- Page Info inject -->
+  
+</div>
+
+  </header>
+
+  
+
+  <!-- TOC -->
+  
+<!---->
+
+  <!-- Content -->
+  <section><p>Almost exactly <em>eleven years ago</em> my good friend and I sat on the couch with
+my very pregnant wife and convinced her that we were going to quit our very stable
+jobs to start a company, and that this was a good idea.</p>
+<span id="continue-reading"></span>
+<p>This conversation went about as well as you might expect, but after a lot of questions
+and assurances everyone was on board.</p>
+<p>Both he and I had spent our careers to this point in the military.
+After meeting through our work as part of the US Air Force's cyber defense mission we eventually ended up
+partnered together training groups of airmen who would go on to be enterprise threat hunters.</p>
+<p>Through this experience we had developed a strong conviction about missing components in
+the status quo security posture advocated by cyber security professionals and implemented around the world.
+We decided to bring automated threat hunting tools to the private sector and this was impetus for Infocyte, Inc.</p>
+<p>We spent a few months building new tools to deliver threat hunting-as-a-service to our
+potential customers. To our surprise, we actually <em>had customers</em>! We were able to leverage
+our new product to help companies respond to ongoing attacks. We felt incredible, as you
+might guess.</p>
+<p>Shortly after these early successes and some local news coverage, we were approached by a
+venture capital firm and encourage to take our in-house tools and turn them into a software
+product that could be sold, instead of used as part of a service.</p>
+<p>This was a great idea, save one small detail: we had no idea how to be a software company.</p>
+<p>After many ups and downs and, we started assembling a solid team to help us build
+the product. Time went on. We faced scaling problems, marketing problems, funding issues,
+bugs, missteps, and mistakes along the way. At the same time, we were gaining traction,
+customers, and making money! Everything seemed like it was starting to work.</p>
+<p>Then we began having discussions around being acquired by Datto, Inc. After a lot of stress, many
+long days and sleepless nights, the deal was done. Infocyte, Inc no longer existed but was
+now part of Datto. That in itself was somewhat bittersweet, but ultimately it was a great
+step forward for the product and opened up opportunities we would not have otherwise had.</p>
+<p>After approximately six months of this "new normal", I woke up to a flood of slack messages
+and news articles announcing that Kaseya had declared their intentions to acquire Datto, consolidating
+the two biggest players in the MSP market. This meant in a matter of months we had gone from a
+twenty eight person company to an almost three thousand person company, then suddenly an almost six
+thousand person company.</p>
+<p>This was a shock to our team but we simply pressed on and continued to grow the product. Eventually
+we were entrusted with an additional entirely new product while being handed the reins of two additional
+existing ones.</p>
+<p>To look back on all we accomplished through the past decade still astonishes me.
+I will most definitely need to write a more thorough accounting of the entire endeavour start to finish.
+I believe the enduring legacy of what we built is a testament to perseverance, hard work, vision, and great team building.</p>
+<p>With all this said, I have ended my journey with the company and product I poured so much of myself into
+over the past eleven years. Closing this chapter of my life was a complicated choice, but I know it was the
+right one.</p>
+</section>
+
+  <hr />
+
+  <!-- Post Taxonomies -->
+  
+<footer class="mt-12 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mb-1.5 mr-1.5 rounded-lg px-5 py-1.5">Tags </span>
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/startup/"
+      >Startup</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/development/"
+      >Development</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://rustysec.github.io/tags/security/"
+      >Security</a
+    >
+    
+  </div>
+  
+</footer>
+
+<!---->
+
+  <!-- Post Nav -->
+  
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  
+  <a
+    class="block-hover-mask flex min-w-[50%] grow items-center rounded-l-md p-6 pr-3 font-semibold no-underline"
+    href="https:&#x2F;&#x2F;rustysec.github.io&#x2F;20240626-atomic-fedora-with-niri&#x2F;"
+    ><span class="mr-1.5">←</span><span>Atomic Fedora with Niri</span></a
+  >
+  <!---->
+  
+</nav>
+
+<!---->
+
+  <!-- Comment -->
+  
+
+  <!-- Page End inject -->
+  
+</article>
+
+    </main>
+
+    <footer class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+    <!---->
+    <!---->
+    &copy; 2025<!---->
+    
+    <a class="link" href="https://rustysec.github.io">
+      rustysec
+    </a>
+    
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <a class="link mr-6 lg:ml-6" href="https://www.getzola.org/" rel="noopener" target="_blank">
+      Powered by Zola
+    </a>
+    <a class="link" href="https://github.com/st1020/kita" rel="noopener" target="_blank">✎ Kita</a>
+  </div>
+  <!-- Footer inject -->
+  
+</footer>
+
+
+    <!-- Body End inject -->
+    
+  </body>
+</html>
