@@ -1,0 +1,262 @@
+<!doctype html>
+<html
+  class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark"
+  lang="en"
+>
+  <head
+    prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#"
+  >
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.23.4" />
+  <title>Closing a Chapter | rustysec</title>
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:title" content="Closing a Chapter" />
+  <meta name="description" content="Almost exactly eleven years ago my good friend and I sat on the couch withmy very pregnant wife and convinced her that we were going to quit our very stablejobs to start a company, and that this was a…" />
+  <meta property="og:description" content="Almost exactly eleven years ago my good friend and I sat on the couch withmy very pregnant wife and convinced her that we were going to quit our very stablejobs to start a company, and that this was a good idea" />
+  <meta property="og:url" content="https://rustysec.github.io/blog/20250321-closing-a-chapter/" />
+  <link rel="canonical" href="https://rustysec.github.io/blog/20250321-closing-a-chapter/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2025-03-21T00:00:00+00:00" />
+  <meta property="article:tag" content="Startup" />
+  <meta property="article:tag" content="Development" />
+  <meta property="article:tag" content="Security" />
+  <link rel="alternate" type="application/atom+xml" href="../../atom.xml" title="rustysec | Atom" />
+  <link rel="license" href="https://opensource.org/license/mit" />
+    <!-- Begin Head inject -->
+    
+    <!-- End Head inject -->
+  <link rel="stylesheet" href="../../main.min.css?h=5e4c964bc50f293bf03c" />
+  <link rel="stylesheet" href="../../icons.css?h=7dd5ab449fa840fc01e2" />
+  <link rel="stylesheet" href="../../admonition.css?h=f7a5ead8b9017f28f0c3" />
+  <link rel="stylesheet" href="../../inline-code-fix.css?h=279d8c5afd2f8a5577d1" />
+<style>
+  :root{--bg: #282a36; --header: #21222c;} :root.dark{--bg: #282a36; --header: #21222c;}
+</style>
+<meta name="theme-color" content="#21222c" />
+  <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="../../apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="../../android-icon.png" />
+  <script src="../../js/zola-theme.min.js?h=20a71ee0f73ad6179b67"></script>
+    <!-- Begin Head End inject -->
+    
+    <!-- End Head End inject -->
+  </head>
+
+  <body class="text-(--dracula-fg) duration-100 ease-out">
+    <!-- Header -->
+<header
+  class="header fixed top-0 z-40 mx-auto min-h-13 w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <a
+          title="Go to home page [Alt + !]"
+          accesskey="!"
+          href="../../"
+          class="text-2xl font-semibold truncate"
+          >rustysec</a
+        >
+        <button
+          type="button"
+          title="Open search [Alt + /]"
+          accesskey="/"
+          onclick="window.zolaTheme.search.toggle()"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px] bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] invert"
+        ></button>
+      </div>
+      <div
+        title="Toggle menu [Alt + `+`]"
+        role="button"
+        accesskey="+"
+        tabindex="0"
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer select-none flex-col items-center justify-center gap-2.5 lg:hidden"
+        onclick="window.zolaTheme.menu.toggleHeader()"
+        onkeydown="
+          event.keyCode == 13 || event.keyCode == 32
+            ? event.preventDefault() || window.zolaTheme.menu.toggleHeader()
+            : true
+        "
+      ></div>
+    </div>
+    <nav class="flex w-full items-center lg:w-auto">
+      <menu
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../blog/"
+            >Blog</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../tags/"
+            >Tags</a
+          >
+        </li>
+      </menu>
+      <!-- Begin Header Nav inject -->
+      
+      <!-- End Header Nav inject -->
+    </nav>
+  </div>
+</header>
+
+    <!-- Begin Body Start inject -->
+    
+    <!-- End Body Start inject -->
+    <main
+      class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word"
+    > <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <input
+    id="linkita-search-input"
+    type="search"
+    class="mb-4 w-full rounded-lg border-[0.5px] border-(--dracula-current-line) bg-(--dracula-bg) p-3 text-base"
+    placeholder="Search this site. Results will load as you type."
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Open search"
+  />
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["../../elasticlunr.min.js", "../../search_index.en.js"], arg: { w: "#linkita-search-wrapper", i: "#linkita-search-input", r: "#linkita-search-results" } });</script>
+ 
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+  <header class="mb-16">
+    <h1 class="my-0! pb-3">Closing a Chapter</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2025-03-21T00:00:00+00:00">2025-03-21</time><span
+        class="middot"></span><time
+    datetime="PT0H3M0S">3&nbsp;min</time><span
+      class="middot"></span><span>Russ Morris</span>
+</div>
+  </header>
+  
+  <!-- TOC -->
+  <!-- Content -->
+  <section><p>Almost exactly <em>eleven years ago</em> my good friend and I sat on the couch with
+my very pregnant wife and convinced her that we were going to quit our very stable
+jobs to start a company, and that this was a good idea.</p>
+<span id="continue-reading"></span>
+<p>This conversation went about as well as you might expect, but after a lot of questions
+and assurances everyone was on board.</p>
+<p>Both he and I had spent our careers to this point in the military.
+After meeting through our work as part of the US Air Force's cyber defense mission we eventually ended up
+partnered together training groups of airmen who would go on to be enterprise threat hunters.</p>
+<p>Through this experience we had developed a strong conviction about missing components in
+the status quo security posture advocated by cyber security professionals and implemented around the world.
+We decided to bring automated threat hunting tools to the private sector and this was impetus for Infocyte, Inc.</p>
+<p>We spent a few months building new tools to deliver threat hunting-as-a-service to our
+potential customers. To our surprise, we actually <em>had customers</em>! We were able to leverage
+our new product to help companies respond to ongoing attacks. We felt incredible, as you
+might guess.</p>
+<p>Shortly after these early successes and some local news coverage, we were approached by a
+venture capital firm and encourage to take our in-house tools and turn them into a software
+product that could be sold, instead of used as part of a service.</p>
+<p>This was a great idea, save one small detail: we had no idea how to be a software company.</p>
+<p>After many ups and downs and, we started assembling a solid team to help us build
+the product. Time went on. We faced scaling problems, marketing problems, funding issues,
+bugs, missteps, and mistakes along the way. At the same time, we were gaining traction,
+customers, and making money! Everything seemed like it was starting to work.</p>
+<p>Then we began having discussions around being acquired by Datto, Inc. After a lot of stress, many
+long days and sleepless nights, the deal was done. Infocyte, Inc no longer existed but was
+now part of Datto. That in itself was somewhat bittersweet, but ultimately it was a great
+step forward for the product and opened up opportunities we would not have otherwise had.</p>
+<p>After approximately six months of this "new normal", I woke up to a flood of slack messages
+and news articles announcing that Kaseya had declared their intentions to acquire Datto, consolidating
+the two biggest players in the MSP market. This meant in a matter of months we had gone from a
+twenty eight person company to an almost three thousand person company, then suddenly an almost six
+thousand person company.</p>
+<p>This was a shock to our team but we simply pressed on and continued to grow the product. Eventually
+we were entrusted with an additional entirely new product while being handed the reins of two additional
+existing ones.</p>
+<p>To look back on all we accomplished through the past decade still astonishes me.
+I will most definitely need to write a more thorough accounting of the entire endeavour start to finish.
+I believe the enduring legacy of what we built is a testament to perseverance, hard work, vision, and great team building.</p>
+<p>With all this said, I have ended my journey with the company and product I poured so much of myself into
+over the past eleven years. Closing this chapter of my life was a complicated choice, but I know it was the
+right one.</p>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+<footer class="mt-12 flex flex-col" tabindex="-1" accesskey="_">
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mr-1.5 mb-1.5 rounded-lg px-5 py-1.5">Tags</span>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/startup/">Startup</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/development/">Development</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/security/">Security</a>
+    
+  </div>
+</footer>
+
+  <!-- Post Nav -->
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  <a
+    class="block-hover-mask flex min-w-[50%] grow items-center rounded-l-md p-6 pr-3 font-semibold no-underline"
+    href="../../blog/20260211-niri-mcp/" accesskey=","
+    ><span class="mr-1.5">&lsaquo;</span><span>Best Use of AI Yet!</span></a>
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="../../blog/20240626-atomic-fedora-with-niri/" accesskey="."
+    ><span>Atomic Fedora with Niri</span><span class="ml-1.5">&rsaquo;</span></a>
+</nav>
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+    </main>
+    <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  <a rel="external" href="https://opensource.org/license/mit">© <time datetime="2026">2026</time> Russ Morris</a>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+  <span class="mr-6 lg:ml-6">
+    <a class="link" href="https://www.getzola.org/" target="_blank"
+      >Powered by Zola</a
+    >
+  </span>
+  <a class="link" href="https://github.com/russ/dracola" target="_blank"
+    >&#9998; Dracola</a
+  >
+</div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+ 
+
+    <!-- Begin Body End inject -->
+    
+    <!-- End Body End inject -->
+  </body>
+</html>

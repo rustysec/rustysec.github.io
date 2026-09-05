@@ -1,0 +1,394 @@
+<!doctype html>
+<html
+  class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark"
+  lang="en"
+>
+  <head
+    prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#"
+  >
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.23.4" />
+  <title>Best Use of AI Yet! | rustysec</title>
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:title" content="Best Use of AI Yet!" />
+  <meta name="description" content="I set out to see if I could build the most impactful, technically impressive, and world changing use forrunning local AI models. Instead, I built a fun yet completely impractical MCP server to control…" />
+  <meta property="og:description" content="I set out to see if I could build the most impactful, technically impressive, and world changing use forrunning local AI models. Instead, I built a fun yet completely impractical MCP server to control Niri" />
+  <meta property="og:url" content="https://rustysec.github.io/blog/20260211-niri-mcp/" />
+  <link rel="canonical" href="https://rustysec.github.io/blog/20260211-niri-mcp/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-02-11T00:00:00+00:00" />
+  <meta property="article:tag" content="Python" />
+  <meta property="article:tag" content="Development" />
+  <meta property="article:tag" content="AI" />
+  <meta property="article:tag" content="LLM" />
+  <meta property="article:tag" content="MCP" />
+  <link rel="alternate" type="application/atom+xml" href="../../atom.xml" title="rustysec | Atom" />
+  <link rel="license" href="https://opensource.org/license/mit" />
+    <!-- Begin Head inject -->
+    
+    <!-- End Head inject -->
+  <link rel="stylesheet" href="../../main.min.css?h=5e4c964bc50f293bf03c" />
+  <link rel="stylesheet" href="../../icons.css?h=7dd5ab449fa840fc01e2" />
+  <link rel="stylesheet" href="../../admonition.css?h=f7a5ead8b9017f28f0c3" />
+  <link rel="stylesheet" href="../../inline-code-fix.css?h=279d8c5afd2f8a5577d1" />
+<style>
+  :root{--bg: #282a36; --header: #21222c;} :root.dark{--bg: #282a36; --header: #21222c;}
+</style>
+<meta name="theme-color" content="#21222c" />
+  <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="../../apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="../../android-icon.png" />
+  <script src="../../js/zola-theme.min.js?h=20a71ee0f73ad6179b67"></script>
+    <!-- Begin Head End inject -->
+    
+    <!-- End Head End inject -->
+  </head>
+
+  <body class="text-(--dracula-fg) duration-100 ease-out">
+    <!-- Header -->
+<header
+  class="header fixed top-0 z-40 mx-auto min-h-13 w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <a
+          title="Go to home page [Alt + !]"
+          accesskey="!"
+          href="../../"
+          class="text-2xl font-semibold truncate"
+          >rustysec</a
+        >
+        <button
+          type="button"
+          title="Open search [Alt + /]"
+          accesskey="/"
+          onclick="window.zolaTheme.search.toggle()"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px] bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] invert"
+        ></button>
+      </div>
+      <div
+        title="Toggle menu [Alt + `+`]"
+        role="button"
+        accesskey="+"
+        tabindex="0"
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer select-none flex-col items-center justify-center gap-2.5 lg:hidden"
+        onclick="window.zolaTheme.menu.toggleHeader()"
+        onkeydown="
+          event.keyCode == 13 || event.keyCode == 32
+            ? event.preventDefault() || window.zolaTheme.menu.toggleHeader()
+            : true
+        "
+      ></div>
+    </div>
+    <nav class="flex w-full items-center lg:w-auto">
+      <menu
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../blog/"
+            >Blog</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../tags/"
+            >Tags</a
+          >
+        </li>
+      </menu>
+      <!-- Begin Header Nav inject -->
+      
+      <!-- End Header Nav inject -->
+    </nav>
+  </div>
+</header>
+
+    <!-- Begin Body Start inject -->
+    
+    <!-- End Body Start inject -->
+    <main
+      class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word"
+    > <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <input
+    id="linkita-search-input"
+    type="search"
+    class="mb-4 w-full rounded-lg border-[0.5px] border-(--dracula-current-line) bg-(--dracula-bg) p-3 text-base"
+    placeholder="Search this site. Results will load as you type."
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Open search"
+  />
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["../../elasticlunr.min.js", "../../search_index.en.js"], arg: { w: "#linkita-search-wrapper", i: "#linkita-search-input", r: "#linkita-search-results" } });</script>
+ 
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+  <header class="mb-16">
+    <h1 class="my-0! pb-3">Best Use of AI Yet!</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2026-02-11T00:00:00+00:00">2026-02-11</time><span
+        class="middot"></span><time
+    datetime="PT0H6M0S">6&nbsp;min</time><span
+      class="middot"></span><span>Russ Morris</span>
+</div>
+  </header>
+  
+  <!-- TOC -->
+<nav class="block-bg prose-a:secondary-link mb-12 rounded-lg p-2 text-lg">
+  <details>
+    <summary class="select-none py-0.5 lg:py-1 pl-3.5" title="[Alt + =]" accesskey="=">
+      <span class="cursor-pointer ml-0.5">Table of Contents</span>
+    </summary>
+    <ul class="ps-8">
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#the-problem">The Problem</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#the-plan">The Plan</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#local-llm-setup">Local LLM Setup</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#creating-an-mcp">Creating an MCP</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#wiring-it-up">Wiring It Up</a>
+        <ul>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#extra-fun">Extra Fun</a>
+          </li>
+        </ul>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#notes">Notes</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#wrapping-up">Wrapping Up</a>
+      </li>
+    </ul>
+  </details>
+</nav>
+  <!-- Content -->
+  <section><p>I set out to see if I could build the most impactful, technically impressive, and world changing use for
+running local AI models. Instead, I built a fun yet completely impractical MCP server to control Niri.</p>
+<span id="continue-reading"></span><h2 id="the-problem">The Problem</h2>
+<p>"How can AI help my daily workflow?" This question is being asked and answered in innumerable ways by countless
+people. "What is a absurd project I can build with AI?" Is the question I chose to tackle.</p>
+<p>I use a few different window managers based on my mood:
+<a rel="external" href="https://github.com/pinnacle-comp/pinnacle">pinnacle</a>,
+<a rel="external" href="https://github.com/yalter/niri">niri</a>,
+<a rel="external" href="https://github.com/swaywm/sway">sway</a>,
+and sometimes <a rel="external" href="https://github.com/dreammaomao/mangowc">mango</a>.
+One day I decided to build some tooling to control one of these environments using AI.</p>
+<p>Is this helpful in some way? Absolutely not. Nothing says "how do I make a keyboard-centric environment
+<em>better</em>" like introducing AI (/s). But, alas, the curiosity had already taken hold.</p>
+<h2 id="the-plan">The Plan</h2>
+<p>Having now decided to give LLM automation of Niri a try, I first needed to come up with a list of things to control
+via an agent. To do this, I asked niri for a list of available commands:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">niri</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> msg</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> action</span></span></code></pre>
+<p>Which produces a list of commands and their description:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="plain"><span class="giallo-l"><span>quit</span></span>
+<span class="giallo-l"><span>      Exit niri</span></span>
+<span class="giallo-l"><span>power-off-monitors</span></span>
+<span class="giallo-l"><span>      Power off all monitors via DPMS</span></span>
+<span class="giallo-l"><span>power-on-monitors</span></span>
+<span class="giallo-l"><span>      Power on all monitors via DPMS</span></span>
+<span class="giallo-l"><span>spawn</span></span>
+<span class="giallo-l"><span>      Spawn a command</span></span>
+<span class="giallo-l"><span>...</span></span></code></pre>
+<p>The next step was to translate these commands into a format an agent could call upon to <em>do</em> something.</p>
+<p>Enter <em><strong>FastMCP</strong></em>.</p>
+<h2 id="local-llm-setup">Local LLM Setup</h2>
+<p>For the sake of completeness, I should lay out the setup I am using for all this.</p>
+<ul>
+<li>System: 2025 Zephyrus G14: 32gb system RAM + 5070ti (12GB VRAM)</li>
+<li>Ollama (locally hosted): with the context window set to 32000</li>
+<li>Open WebUI: Running in podman locally</li>
+<li>Model: I ran this a couple of times using different models:
+<ul>
+<li>Qwen3 Coder (Unsloth)</li>
+<li>Devstral2 small</li>
+<li>GPT OSS 20b</li>
+</ul>
+</li>
+</ul>
+<h2 id="creating-an-mcp">Creating an MCP</h2>
+<p><a rel="external" href="https://modelcontextprotocol.io">Model Context Protocol</a> is a way to provide an AI system methods to fetch data or
+perform some action based on a set of descriptions and code. The agent or application doesn't actual know
+how the data is fetched or the action is called, it simply knows "if I talk to this other thing and provide
+it some defined parameters, I should get something helpful back."</p>
+<p>So here is where I took our list of commands + descriptions and asked my local model to create a <a rel="external" href="https://github.com/jlowin/fastmcp">FastMCP</a>
+implementation around the them. I attached a text file with the list of commands and descriptions in OpenWebUI
+and used Qwen3 Coder with the following initial prompt:</p>
+<blockquote>
+<p>i need to create a fast mcp server based on a set of commands and descriptions. the commands will be executed as a subprocess in the form <code>niri msg action &lt;command&gt;</code>. i will attach a file with the commands on a line followed by the description on a new line. use the description to create the fastmcp descriptions/comments.</p>
+</blockquote>
+<p>This <em>almost</em> worked as anticipated, the format wasn't quite right and the functions generated didn't actually
+execute the commands 🤦. I tried to fix it.</p>
+<blockquote>
+<p>this was a good start, but the commands in the file should be translated to an mcp tool and should use python subprocess to call the <code>niri msg action &lt;command&gt;</code></p>
+</blockquote>
+<p>The functions were modified correctly to execute the subprocess correctly, but the fastmcp decorators were not correct.</p>
+<blockquote>
+<p>this is almost right. please replace all decorators with <code>@mcp.tool</code></p>
+</blockquote>
+<p>Now we are cooking. I copied the output and placed it in a <code>server.py</code> file. In the same directory I installed fastmcp using:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">uv</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> init</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">uv</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> add</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> fastmcp</span></span></code></pre>
+<p>We can now run the MCP server with:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">uv</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> run</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> fastmcp</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> run</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> server.py:mcp</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> -</span><span style="color: light-dark(#BF9EEE, #BD93F9);">-transport</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> http</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> -</span><span style="color: light-dark(#BF9EEE, #BD93F9);">-port</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 8000</span><span> </span></span></code></pre>
+<p>The MCP server is now listening on <code>http://localhost:8000/mcp</code>.</p>
+<h2 id="wiring-it-up">Wiring It Up</h2>
+<p>The next step to actually using the MCP is to hook it up to something that can leverage tools and call them. Luckily for us OpenWebUI
+can do that:</p>
+<ul>
+<li>Click on the profile icon in the top right of OpenWebUI</li>
+<li>Select "Settings"</li>
+<li>Click "Admin Settings"</li>
+<li>Next find the "External Tools" section</li>
+<li>Click "Add Connection" plus symbol on the right</li>
+<li>Change the "Type" to "MCP Streamable HTTP"</li>
+<li>Set the URL base to <code>http://localhost:8000/mcp</code> and click the test connection button</li>
+<li>Set the authentication to <code>None</code></li>
+</ul>
+<p>Back in your chats, you will see an icon in the input box for "integration", select that, navigate through an sub-menus until you find your MCP and enable it.
+Once you have done this you can now issue commands via the chat window to control things in your Niri environment.</p>
+<p>It's fine to pick a smaller fast model that can handle tool calling here, we don't really need anything terribly smart. I had Mistral 2 14b already available
+so I decided to just use that.</p>
+<p>My system prompt is something along the lines of:</p>
+<blockquote>
+<p>you are an agent whose sole purpose is to take user input and utilize the Niri MCP to accomplish tasks.</p>
+</blockquote>
+<p>Then I simply can communicate via OpenWebUI:</p>
+<blockquote>
+<p>toggle the overview</p>
+</blockquote>
+<p>and 💥 things work as expected.</p>
+<h3 id="extra-fun">Extra Fun</h3>
+<p>You can also use the speech recognition and voice mode of OpenWebUI to control Niri through our new MCP by speaking commands instead of typing.</p>
+<h2 id="notes">Notes</h2>
+<p>If you open up the <code>server.py</code> we generated at the beginning of this adventure, you may notice some of the Niri commands are missing.
+This will probably vary depending on the model you used or the exact back and forth via chat. In this case, I just manually added a few
+missing things.</p>
+<p>Additionally, there are some calls that require some extra parameters and that's somewhat easy to add:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="python"><span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">@</span><span style="color: light-dark(#62E884, #50FA7B);">mcp</span><span style="color: light-dark(#62E884, #50FA7B);">.</span><span style="color: light-dark(#62E884, #50FA7B);">tool</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">def</span><span style="color: light-dark(#62E884, #50FA7B);"> move_column_to_workspace</span><span>(</span><span>)</span><span>:</span></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">    &quot;&quot;&quot;</span><span style="color: light-dark(#7B7F8B, #6272A4);">Move the focused column to a workspace by reference (index or name)</span><span style="color: light-dark(#7B7F8B, #6272A4);">&quot;&quot;&quot;</span></span>
+<span class="giallo-l"><span>    subprocess</span><span>.</span><span>run</span><span>(</span><span>[</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">niri</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">msg</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">action</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">move-column-to-workspace</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>]</span><span>)</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">    return</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">Column moved to workspace</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span></span>
+<span class="giallo-l"></span></code></pre>
+<p>Becomes:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="python"><span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">@</span><span style="color: light-dark(#62E884, #50FA7B);">mcp</span><span style="color: light-dark(#62E884, #50FA7B);">.</span><span style="color: light-dark(#62E884, #50FA7B);">tool</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">def</span><span style="color: light-dark(#62E884, #50FA7B);"> move_column_to_workspace</span><span>(</span><span style="color: light-dark(#FFB86C, #FFB86C);font-style: italic;">index</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> int</span><span>)</span><span>:</span></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">    &quot;&quot;&quot;</span><span style="color: light-dark(#7B7F8B, #6272A4);">Move the focused column to a workspace by reference (index or name)</span><span style="color: light-dark(#7B7F8B, #6272A4);">&quot;&quot;&quot;</span></span>
+<span class="giallo-l"><span>    subprocess</span><span>.</span><span>run</span><span>(</span><span>[</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">niri</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">msg</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">action</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">move-column-to-workspace</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span><span>,</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> str</span><span>(</span><span>index</span><span>)</span><span>]</span><span>)</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">    return</span><span style="color: light-dark(#DEE492, #E9F284);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">Column moved to workspace</span><span style="color: light-dark(#DEE492, #E9F284);">&quot;</span></span>
+<span class="giallo-l"></span></code></pre><h2 id="wrapping-up">Wrapping Up</h2>
+<p>This was a interesting little experiment to build something I hadn't seen yet, using some new (to me) tooling.
+Is it useful? Definitely not. In any case, I'm a fan of continuous learning and this was enlightening on a number of fronts.</p>
+<p>I think this exercise highlights a couple of interesting things. First, local models are not nearly as smart as
+the cloud versions and often require more precision and back and forth to get things right. This can be challenging
+since the exchange grows the context window which can lead to poorer outputs the longer the conversation is maintained.
+Because of this, it becomes important to enter into the project with some well constructed prompts up front to try and knock out the task
+in as limited a conversation as possible. Secondly, most of the local models have a better foundational understanding
+of some technologies than others. I was surprised that FastMCP creation wasn't slightly more trivial than it turned out
+to be, and my anecdotal experience trying to use Qwen3 Coder for rust development has been similarly hit-and-miss. However,
+the coding models are generally very well versed in more mainstream python and javascript frameworks. Despite the paper cuts,
+this experiment demonstrates that LLM/AI tools are evolving quickly.</p>
+<p>My main take away is that this technology continues to improve at a very rapid rate. Attempting this same project with
+an actual coding assistant would undoubtedly yield better results faster, and I will likely reattempt this with
+<a rel="external" href="https://opencode.ai">OpenCode</a> shortly. I would encourage every developer to at least maintain some contact with the
+frontier of the AI space, even if your previous experience left something to be desired. It's always good to keep learning,
+and I don't believe this tech is going away anytime soon.</p>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+<footer class="mt-12 flex flex-col" tabindex="-1" accesskey="_">
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mr-1.5 mb-1.5 rounded-lg px-5 py-1.5">Tags</span>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/python/">Python</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/development/">Development</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/ai/">AI</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/llm/">LLM</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/mcp/">MCP</a>
+    
+  </div>
+</footer>
+
+  <!-- Post Nav -->
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="../../blog/20250321-closing-a-chapter/" accesskey="."
+    ><span>Closing a Chapter</span><span class="ml-1.5">&rsaquo;</span></a>
+</nav>
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+    </main>
+    <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  <a rel="external" href="https://opensource.org/license/mit">© <time datetime="2026">2026</time> Russ Morris</a>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+  <span class="mr-6 lg:ml-6">
+    <a class="link" href="https://www.getzola.org/" target="_blank"
+      >Powered by Zola</a
+    >
+  </span>
+  <a class="link" href="https://github.com/russ/dracola" target="_blank"
+    >&#9998; Dracola</a
+  >
+</div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+ 
+
+    <!-- Begin Body End inject -->
+    
+    <!-- End Body End inject -->
+  </body>
+</html>

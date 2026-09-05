@@ -1,0 +1,302 @@
+<!doctype html>
+<html
+  class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark"
+  lang="en"
+>
+  <head
+    prefix="og: https://ogp.me/ns#"
+  >
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.23.4" />
+  <title>rustysec</title>
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:title" content="rustysec" />
+  <meta name="description" content="Software Engineer: Security, EDR, Detection Engineering, Front End, Data, AI" />
+  <meta property="og:description" content="Software Engineer: Security, EDR, Detection Engineering, Front End, Data, AI" />
+  <meta property="og:url" content="https://rustysec.github.io/" />
+  <link rel="canonical" href="https://rustysec.github.io/" />
+  <meta property="og:type" content="website" />
+  <link rel="alternate" type="application/atom+xml" href="atom.xml" title="rustysec | Atom" />
+  <link rel="license" href="https://opensource.org/license/mit" />
+    <!-- Begin Head inject -->
+    
+    <!-- End Head inject -->
+  <link rel="stylesheet" href="main.min.css?h=5e4c964bc50f293bf03c" />
+  <link rel="stylesheet" href="icons.css?h=7dd5ab449fa840fc01e2" />
+  <link rel="stylesheet" href="admonition.css?h=f7a5ead8b9017f28f0c3" />
+  <link rel="stylesheet" href="inline-code-fix.css?h=279d8c5afd2f8a5577d1" />
+<style>
+  :root{--bg: #282a36; --header: #21222c;} :root.dark{--bg: #282a36; --header: #21222c;}
+</style>
+<meta name="theme-color" content="#21222c" />
+  <link rel="preload" as="image" href="icons/github.svg" />
+  <link rel="preload" as="image" href="icons/bluesky.svg" />
+  <link rel="preload" as="image" href="https://cdn.jsdelivr.net/npm/simple-icons/icons/twitter.svg" />
+  <link rel="preload" as="image" href="icons/rss.svg" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="android-icon.png" />
+  <script src="js/zola-theme.min.js?h=20a71ee0f73ad6179b67"></script>
+    <!-- Begin Head End inject -->
+    
+    <!-- End Head End inject -->
+  </head>
+
+  <body class="text-(--dracula-fg) duration-100 ease-out">
+    <!-- Header -->
+<header
+  class="header fixed top-0 z-40 mx-auto min-h-13 w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <a
+          title="Go to home page [Alt + !]"
+          accesskey="!"
+          href=""
+          class="text-2xl font-semibold truncate"
+          >rustysec</a
+        >
+        <button
+          type="button"
+          title="Open search [Alt + /]"
+          accesskey="/"
+          onclick="window.zolaTheme.search.toggle()"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px] bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] invert"
+        ></button>
+      </div>
+      <div
+        title="Toggle menu [Alt + `+`]"
+        role="button"
+        accesskey="+"
+        tabindex="0"
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer select-none flex-col items-center justify-center gap-2.5 lg:hidden"
+        onclick="window.zolaTheme.menu.toggleHeader()"
+        onkeydown="
+          event.keyCode == 13 || event.keyCode == 32
+            ? event.preventDefault() || window.zolaTheme.menu.toggleHeader()
+            : true
+        "
+      ></div>
+    </div>
+    <nav class="flex w-full items-center lg:w-auto">
+      <menu
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href=""
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="blog/"
+            >Blog</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="tags/"
+            >Tags</a
+          >
+        </li>
+      </menu>
+      <!-- Begin Header Nav inject -->
+      
+      <!-- End Header Nav inject -->
+    </nav>
+  </div>
+</header>
+
+    <!-- Begin Body Start inject -->
+    
+    <!-- End Body Start inject -->
+    <main
+      class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word"
+    > <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <input
+    id="linkita-search-input"
+    type="search"
+    class="mb-4 w-full rounded-lg border-[0.5px] border-(--dracula-current-line) bg-(--dracula-bg) p-3 text-base"
+    placeholder="Search this site. Results will load as you type."
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Open search"
+  />
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["elasticlunr.min.js", "search_index.en.js"], arg: { w: "#linkita-search-wrapper", i: "#linkita-search-input", r: "#linkita-search-results" } });</script>
+  <!-- Landing page (homepage): console-style hero + HUD link cards.
+     The blog list is not rendered here — it lives on /blog/ (see
+     content/blog/_index.md). --><header class="hero relative mb-14"><div class="hero-grid pointer-events-none absolute inset-0 -m-4" aria-hidden="true"></div>
+  <div class="hero-glow pointer-events-none absolute inset-0 -m-4" aria-hidden="true"></div>
+  <div class="not-prose relative">
+    <p class="mt-0 mb-4 font-mono text-sm">
+      <span class="text-(--dracula-cyan)">rustysec</span
+      ><span class="text-(--dracula-comment)"> ~ % </span
+      ><span class="text-(--dracula-fg)">whoami</span
+      ><span class="hero-caret" aria-hidden="true"></span>
+    </p>
+    <div class="flex flex-wrap items-center gap-5">
+      <h1 class="hero-title my-0! text-4xl font-bold tracking-tight sm:text-5xl">Russ Morris</h1>
+    </div>
+    <p class="hero-tagline mt-4 mb-0! text-lg">
+      Coding // Hacking // Musing
+    </p>
+    <nav class="mt-6 flex flex-wrap gap-2.5">
+      <a
+        class="hud-icon"
+        style="--url: url(icons/github.svg);"
+        href="https://github.com/rustysec"
+        target="_blank"
+        rel="me"
+        title="github"
+        >github</a
+      >
+      <a
+        class="hud-icon"
+        style="--url: url(icons/bluesky.svg);"
+        href="https://bsky.app/profile/rustysec.bsky.social"
+        target="_blank"
+        rel="me"
+        title="bluesky"
+        >bluesky</a
+      >
+      <a
+        class="hud-icon"
+        style="--url: url(https://cdn.jsdelivr.net/npm/simple-icons/icons/twitter.svg);"
+        href="https://twitter.com/rustysec"
+        target="_blank"
+        rel="me"
+        title="twitter"
+        >twitter</a
+      >
+      <a
+        class="hud-icon"
+        style="--url: url(icons/rss.svg);"
+        href="atom.xml"
+        target="_blank"
+        rel="alternate"
+        title="rss"
+        >rss</a
+      >
+    </nav>
+  </div>
+  <div class="hero-rule mt-8" aria-hidden="true"></div>
+</header><section class="landing-intro hud-frame mb-14">
+  <span class="landing-intro-scan" aria-hidden="true"></span>
+  <div class="landing-intro-bar font-mono text-xs">
+    <span class="landing-intro-label">// dossier</span>
+    <span class="landing-intro-ticks" aria-hidden="true"></span>
+  </div>
+  <div class="landing-entries"><h2 id="profile">Profile</h2>
+<p><strong>Software Engineer // SF Bay Area</strong></p>
+<p><em>Toolkit: Primary</em></p>
+<ul>
+<li>Rust</li>
+<li>JavaScript</li>
+<li>TypeScript</li>
+<li>C/C++</li>
+</ul>
+<p><em>Toolkit: Backup</em></p>
+<ul>
+<li>Golang</li>
+<li>C#/.NET</li>
+</ul>
+<p><code>sudo -iu musician</code></p>
+<ul>
+<li>Drums</li>
+<li>Guitar</li>
+<li>Bass</li>
+</ul>
+<h2 id="background">Background</h2>
+<p>10+ Years of Endpoint Agent Development @ Infocyte, Inc</p>
+<ul>
+<li>Memory Analysis</li>
+<li>Forensics</li>
+<li>Data Processing</li>
+<li>Detection Engineering</li>
+</ul>
+<p>USAF Cyber Operations Officer</p>
+<ul>
+<li>Red Team Operator</li>
+<li>Strategic Planner: Cyber Ops</li>
+<li>Range Engineer</li>
+</ul>
+<h2 id="now">Now</h2>
+<p>Having Fun // Building Meaningful Software</p>
+<ul>
+<li>Security</li>
+<li>AI Agents</li>
+<li>Automation</li>
+</ul>
+<p>Not coding? I'll be with my family, playing music, running, cycling, hacking the golf course, or volunteering.</p>
+</div>
+</section><nav class="not-prose grid grid-cols-1 gap-4 sm:grid-cols-3">
+  <a
+    class="hud-card hud-frame block-hover-title block p-6 no-underline"
+    href="blog/"
+  >
+    <span class="hud-scan" aria-hidden="true"></span>
+    <h2 class="my-0! flex items-center justify-between gap-2 text-xl font-bold">
+      Blog <span class="hud-arrow" aria-hidden="true">→</span>
+    </h2>
+    <p class="mt-2 mb-0! font-mono text-xs text-(--dracula-comment)">Read the latest posts</p>
+  </a>
+  <a
+    class="hud-card hud-frame block-hover-title block p-6 no-underline"
+    href="tags/"
+  >
+    <span class="hud-scan" aria-hidden="true"></span>
+    <h2 class="my-0! flex items-center justify-between gap-2 text-xl font-bold">
+      Tags <span class="hud-arrow" aria-hidden="true">→</span>
+    </h2>
+    <p class="mt-2 mb-0! font-mono text-xs text-(--dracula-comment)">Browse by topic</p>
+  </a>
+  <a
+    class="hud-card hud-frame block-hover-title block p-6 no-underline"
+    href="archive/"
+  >
+    <span class="hud-scan" aria-hidden="true"></span>
+    <h2 class="my-0! flex items-center justify-between gap-2 text-xl font-bold">
+      Archive <span class="hud-arrow" aria-hidden="true">→</span>
+    </h2>
+    <p class="mt-2 mb-0! font-mono text-xs text-(--dracula-comment)">All posts by year</p>
+  </a>
+</nav>
+ 
+    </main>
+    <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  <a rel="external" href="https://opensource.org/license/mit">© <time datetime="2026">2026</time> Russ Morris</a>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+  <span class="mr-6 lg:ml-6">
+    <a class="link" href="https://www.getzola.org/" target="_blank"
+      >Powered by Zola</a
+    >
+  </span>
+  <a class="link" href="https://github.com/russ/dracola" target="_blank"
+    >&#9998; Dracola</a
+  >
+</div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+ 
+
+    <!-- Begin Body End inject -->
+    
+    <!-- End Body End inject -->
+  </body>
+</html>

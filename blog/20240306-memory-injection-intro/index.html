@@ -1,0 +1,549 @@
+<!doctype html>
+<html
+  class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark"
+  lang="en"
+>
+  <head
+    prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#"
+  >
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.23.4" />
+  <title>Introduction to Memory Injection | rustysec</title>
+  <meta property="og:site_name" content="rustysec" />
+  <meta property="og:title" content="Introduction to Memory Injection" />
+  <meta name="description" content="As security software gets smarter and more effective, finding ways to hidefrom it have also evolved. There are a number of methods and tactics employedto achieve full memory residence, thus thwarting …" />
+  <meta property="og:description" content="As security software gets smarter and more effective, finding ways to hidefrom it have also evolved. There are a number of methods and tactics employedto achieve full memory residence, thus thwarting many detection mechanisms.Understanding these implementations is essential to developing solutions t…" />
+  <meta property="og:url" content="https://rustysec.github.io/blog/20240306-memory-injection-intro/" />
+  <link rel="canonical" href="https://rustysec.github.io/blog/20240306-memory-injection-intro/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2024-03-06T00:00:00+00:00" />
+  <meta property="article:tag" content="Memory" />
+  <meta property="article:tag" content="Malware" />
+  <link rel="alternate" type="application/atom+xml" href="../../atom.xml" title="rustysec | Atom" />
+  <link rel="license" href="https://opensource.org/license/mit" />
+    <!-- Begin Head inject -->
+    
+    <!-- End Head inject -->
+  <link rel="stylesheet" href="../../main.min.css?h=5e4c964bc50f293bf03c" />
+  <link rel="stylesheet" href="../../icons.css?h=7dd5ab449fa840fc01e2" />
+  <link rel="stylesheet" href="../../admonition.css?h=f7a5ead8b9017f28f0c3" />
+  <link rel="stylesheet" href="../../inline-code-fix.css?h=279d8c5afd2f8a5577d1" />
+<style>
+  :root{--bg: #282a36; --header: #21222c;} :root.dark{--bg: #282a36; --header: #21222c;}
+</style>
+<meta name="theme-color" content="#21222c" />
+  <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="../../apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="../../android-icon.png" />
+  <script src="../../js/zola-theme.min.js?h=20a71ee0f73ad6179b67"></script>
+    <!-- Begin Head End inject -->
+    
+    <!-- End Head End inject -->
+  </head>
+
+  <body class="text-(--dracula-fg) duration-100 ease-out">
+    <!-- Header -->
+<header
+  class="header fixed top-0 z-40 mx-auto min-h-13 w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <a
+          title="Go to home page [Alt + !]"
+          accesskey="!"
+          href="../../"
+          class="text-2xl font-semibold truncate"
+          >rustysec</a
+        >
+        <button
+          type="button"
+          title="Open search [Alt + /]"
+          accesskey="/"
+          onclick="window.zolaTheme.search.toggle()"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px] bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] invert"
+        ></button>
+      </div>
+      <div
+        title="Toggle menu [Alt + `+`]"
+        role="button"
+        accesskey="+"
+        tabindex="0"
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer select-none flex-col items-center justify-center gap-2.5 lg:hidden"
+        onclick="window.zolaTheme.menu.toggleHeader()"
+        onkeydown="
+          event.keyCode == 13 || event.keyCode == 32
+            ? event.preventDefault() || window.zolaTheme.menu.toggleHeader()
+            : true
+        "
+      ></div>
+    </div>
+    <nav class="flex w-full items-center lg:w-auto">
+      <menu
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../blog/"
+            >Blog</a
+          >
+        </li>
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="../../tags/"
+            >Tags</a
+          >
+        </li>
+      </menu>
+      <!-- Begin Header Nav inject -->
+      
+      <!-- End Header Nav inject -->
+    </nav>
+  </div>
+</header>
+
+    <!-- Begin Body Start inject -->
+    
+    <!-- End Body Start inject -->
+    <main
+      class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word"
+    > <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <input
+    id="linkita-search-input"
+    type="search"
+    class="mb-4 w-full rounded-lg border-[0.5px] border-(--dracula-current-line) bg-(--dracula-bg) p-3 text-base"
+    placeholder="Search this site. Results will load as you type."
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Open search"
+  />
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["../../elasticlunr.min.js", "../../search_index.en.js"], arg: { w: "#linkita-search-wrapper", i: "#linkita-search-input", r: "#linkita-search-results" } });</script>
+ 
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+  <header class="mb-16">
+    <h1 class="my-0! pb-3">Introduction to Memory Injection</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2024-03-06T00:00:00+00:00">2024-03-06</time><span
+        class="middot"></span><time
+    datetime="PT0H8M0S">8&nbsp;min</time><span
+      class="middot"></span><span>Russ Morris</span>
+</div>
+  </header>
+  
+  <!-- TOC -->
+<nav class="block-bg prose-a:secondary-link mb-12 rounded-lg p-2 text-lg">
+  <details>
+    <summary class="select-none py-0.5 lg:py-1 pl-3.5" title="[Alt + =]" accesskey="=">
+      <span class="cursor-pointer ml-0.5">Table of Contents</span>
+    </summary>
+    <ul class="ps-8">
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#the-basics">The Basics</a>
+        <ul>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#payload">Payload</a>
+          </li>
+        </ul>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#process-hollowing">Process Hollowing</a>
+        <ul>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#example">Example</a>
+          </li>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#detection">Detection</a>
+          </li>
+        </ul>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#inject-and-spawn">Inject and Spawn</a>
+        <ul>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#detection-1">Detection</a>
+          </li>
+        </ul>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#dll-injection">DLL Injection</a>
+        <ul>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#detection-2">Detection</a>
+          </li>
+        </ul>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#module-stomping">Module Stomping</a>
+        <ul>
+          <li class="ps-0.5">
+            <a class="no-underline hover:underline" href="#detection-3">Detection</a>
+          </li>
+        </ul>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#conclusion">Conclusion</a>
+      </li>
+    </ul>
+  </details>
+</nav>
+  <!-- Content -->
+  <section><p>As security software gets smarter and more effective, finding ways to hide
+from it have also evolved. There are a number of methods and tactics employed
+to achieve full memory residence, thus thwarting many detection mechanisms.
+Understanding these implementations is essential to developing solutions to the
+problem.</p>
+<span id="continue-reading"></span>
+<p>The threat of memory resident, or "file-less", malware is not at all new.
+For years actors have used these technologies to evade detection and enhance
+the effectiveness of ransomware, banking malware, and even toolkits such as
+Metasploit and Cobalt Strike.</p>
+<p>But how do these things work? Well, in truth, there really is nothing particularly
+complicated once one can understand the operating system features and capabilities
+leveraged to employ thees attacks.</p>
+<h2 id="the-basics">The Basics</h2>
+<p>To begin, let's look at application code as it is being run. Simplistically we can
+think of a program a little like this:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="plain"><span class="giallo-l"><span>|---code---|---heap memory---|</span></span>
+<span class="giallo-l"><span>  ^- execution pointer</span></span></code></pre>
+<p>Now there is a lot we leave out here in this little diagram, namely things like the stack
+and where certain data is located. There are tables in most executable formats that include
+symbols, debug information, import and export sections, etc. For now, we don't really need
+to look at these.</p>
+<p>The magic of memory injection is changing the location of the execution pointer to
+some custom location housing the code we want to run. This interrupts the actual flow
+of the application and allows the "attacker" to hijack the rest of the program's lifetime.</p>
+<p>Now we'll take a look at some simple breakdowns of various techniques to get code loaded into
+an application and alter it's execution.</p>
+<h3 id="payload">Payload</h3>
+<p>Throughout the rest of this post, I will reference a "payload" to inject. There are a number
+of ways to go about creating one, but a simple and effective method would be to use metasploit
+to produce some message box shellcode (or whatever else you prefer).</p>
+<h2 id="process-hollowing">Process Hollowing</h2>
+<p>To support features like debugging, operating systems enable breakpoints to halt execution
+and inspect the state of the running process. Another fun feature involves the "state" of
+an application when it is spawned. In general, when you run a program, it just executed as
+a normally running process. There are other states, however, including the <code>SUSPENDED</code> state.
+This enables the application loader to bring the process code into memory, resolve imports,
+and align all the sections to their proper locations for the application to run. But this is
+where it stops. The program is ready to go and the execution pointer is targeting the first
+instruction location, but it does <em>not</em> proceed with the actual execution.</p>
+<p>This is where we can get clever. By starting the process in a suspended state and knowing where
+the code section is located, we can now overwrite the normal functionality of the application
+with our custom code. This has the fun side effect of the application <em>appearing</em> as though
+it is the legitimate original.</p>
+<h3 id="example">Example</h3>
+<p>Now let us take a peek at what this can look like in actual code. First we need to start by
+creating a process in a suspended state. I am going to use windows examples, even though
+this same technique can be applied to Linux and MacOS (the latter requires code signed
+binaries to access some of the necessary APIs, however).</p>
+<p>Luckily for us, MSDN has some fairly helpful documentation on
+<a rel="external" href="https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags">process creations</a>
+flags. Most importantly for our purposes:</p>
+<blockquote>
+<p>CREATE_SUSPENDED
+0x00000004
+The primary thread of the new process is created in a suspended state, and does not run until the ResumeThread function is called.</p>
+</blockquote>
+<p><strong>Quick Disclaimer:</strong> much of this code assumes we are dealing with 64 bit processes, in reality we <em>should</em>
+account for either 32 or 64 bit applications.</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="rust"><span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">use</span><span> goblin</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>pe</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>header</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">Header</span><span>;</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">use</span><span> std</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span></span>
+<span class="giallo-l"><span>    ffi</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">CString</span><span>,</span></span>
+<span class="giallo-l"><span>    mem</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span><span>size_of</span><span>,</span><span> zeroed</span><span>}</span><span>,</span></span>
+<span class="giallo-l"><span>    ptr</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span><span>null_mut</span><span>,</span><span> read</span><span>}</span><span>,</span></span>
+<span class="giallo-l"><span>}</span><span>;</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">use</span><span> winapi</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span></span>
+<span class="giallo-l"><span>    ctypes</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>c_void</span><span>,</span></span>
+<span class="giallo-l"><span>    um</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span></span>
+<span class="giallo-l"><span>        errhandlingapi</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">GetLastError</span><span>,</span></span>
+<span class="giallo-l"><span>        memoryapi</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">ReadProcessMemory</span><span>,</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> WriteProcessMemory</span><span>}</span><span>,</span></span>
+<span class="giallo-l"><span>        processthreadsapi</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>{</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">CreateProcessA</span><span>,</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> ResumeThread</span><span>,</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> PROCESS_INFORMATION</span><span>,</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> STARTUPINFOA</span><span>}</span><span>,</span></span>
+<span class="giallo-l"><span>        winbase</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">CREATE_SUSPENDED</span><span>,</span></span>
+<span class="giallo-l"><span>        winnt</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">HANDLE</span><span>,</span></span>
+<span class="giallo-l"><span>    }</span><span>,</span></span>
+<span class="giallo-l"><span>}</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>#</span><span>[</span><span>link</span><span>(</span><span>name </span><span style="color: light-dark(#F286C4, #FF79C6);">=</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">ntdll</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span>]</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">extern</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">system</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">    fn</span><span style="color: light-dark(#62E884, #50FA7B);"> NtQueryInformationProcess</span><span>(</span></span>
+<span class="giallo-l"><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">        ProcessHandle</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#F286C4, #FF79C6);"> *</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> c_void</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">        ProcessInformationClass</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> u32</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">        ProcessInformation</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#F286C4, #FF79C6);"> *</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> c_void</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">        ProcessInformationLength</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> u32</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">        ReturnLength</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#F286C4, #FF79C6);"> *</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> u32</span><span>,</span></span>
+<span class="giallo-l"><span>    )</span><span style="color: light-dark(#F286C4, #FF79C6);"> -&gt;</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> u32</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span style="color: light-dark(#F286C4, #FF79C6);"> mut</span><span> startup_info</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> STARTUPINFOA</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#F286C4, #FF79C6);"> unsafe</span><span> {</span><span style="color: light-dark(#62E884, #50FA7B);"> zeroed</span><span>(</span><span>)</span><span> }</span><span>;</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span style="color: light-dark(#F286C4, #FF79C6);"> mut</span><span> process_info</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> PROCESS_INFORMATION</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#F286C4, #FF79C6);"> unsafe</span><span> {</span><span style="color: light-dark(#62E884, #50FA7B);"> zeroed</span><span>(</span><span>)</span><span> }</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> path</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> CString</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#62E884, #50FA7B);">from</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">r</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">c:\windows\system32\notepad.exe</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">if</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span><span style="color: light-dark(#F286C4, #FF79C6);"> ==</span><span style="color: light-dark(#F286C4, #FF79C6);"> unsafe</span><span> {</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    CreateProcessA</span><span>(</span></span>
+<span class="giallo-l"><span>        c_path</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">as_ptr</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">        null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">        null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">        null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">        0</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">        CREATE_SUSPENDED</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">        null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">        null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">        &amp;</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> startup_info</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">        &amp;</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> process_info</span><span>,</span></span>
+<span class="giallo-l"><span>    )</span></span>
+<span class="giallo-l"><span>}</span><span> {</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    panic!</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">Could not create the process to hollow!</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p>At this point, a <code>notepad.exe</code> process is loaded up and ready for some plain text editing.
+But we have different plans! This is where things start to get fun. To figure out where to
+inject our shellcode, we really need to find the execution entry point. Luckily for us,
+the <code>PROCESS_INFORMATION</code> structure contains a handle to the main thread of the loaded process.
+We can query the information about this thread to retrieve the entry address!</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="rust"><span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span style="color: light-dark(#F286C4, #FF79C6);"> mut</span><span> thread_base_address</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">NtQueryInformationThread</span><span>(</span></span>
+<span class="giallo-l"><span>    thread</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">    9</span><span>,</span><span style="color: light-dark(#7B7F8B, #6272A4);"> //</span><span style="color: light-dark(#7B7F8B, #6272A4);"> See note below!</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">    &amp;</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> thread_base_address</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span style="color: light-dark(#F286C4, #FF79C6);"> *</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> _</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span> _</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    size_of</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>&lt;</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">usize</span><span>&gt;</span><span>(</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span> _</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span>)</span><span>;</span></span></code></pre>
+<p>Now the <code>InformationClass</code> parameter for this function call is not officially documented.
+However, there are several projects that aim to implement these functions and have provided
+descriptions, such as
+<a rel="external" href="http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FThread%2FNtQueryInformationThread.html">ntinternals.net</a></p>
+<p>We have everything we need at this point. We assume the <code>payload</code> is our shellcode stored as a <code>Vec&lt;u8&gt;</code> and:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="rust"><span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span style="color: light-dark(#F286C4, #FF79C6);"> mut</span><span> bytes_out</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">if</span><span style="color: light-dark(#62E884, #50FA7B);"> WriteProcessMemory</span><span>(</span></span>
+<span class="giallo-l"><span>    process</span><span>,</span></span>
+<span class="giallo-l"><span>    entry_point</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span> _</span><span>,</span></span>
+<span class="giallo-l"><span>    payload</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">as_ptr</span><span>(</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span> _</span><span>,</span></span>
+<span class="giallo-l"><span>    payload</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">len</span><span>(</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span> _</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">    &amp;</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> bytes_out</span><span>,</span></span>
+<span class="giallo-l"><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> ==</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    panic!</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">Could not write process memory: </span><span style="color: light-dark(#E7EE98, #F1FA8C);">{</span><span style="color: light-dark(#E7EE98, #F1FA8C);">}</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>,</span><span style="color: light-dark(#62E884, #50FA7B);"> GetLastError</span><span>(</span><span>)</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p>The last thing we need to do is resume our process thread:</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="rust"><span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">ResumeThread</span><span>(</span><span>process_info</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span>hThread</span><span>)</span><span>;</span></span></code></pre>
+<p>You will now see a message box, if you chose to go that route. If you open windows task manager you will also
+see an instance of <code>notepad.exe</code> running. Viewing the details of the process will show the application appears
+completely legitimate and indistinguishable from a "normal" instance of the same process.</p>
+<h3 id="detection">Detection</h3>
+<p>Generally speaking, this isn't a conceptually difficult attack to detect. If we have the original
+code on disk and that in memory, we can compare them for differences. An issue arises due to a
+side effect of the loading process. Programs are compiled with addresses to functions and variables
+at various offsets inside the binary code. A semi-randomization process takes place to adjust these
+offsets when the program is loaded. This does two things: first it adjusts the offsets to their memory
+aligned locations since there is often different alignments on disk vs in memory. Secondly, the
+randomization process (on windows this is referred to as Address Space Layer Randomization, or ASLR)
+is intended to thwart attacks which rely on knowing addresses of code to call, such as a buffer overflow.</p>
+<p>Now knowing this, we can try to resolve these differences in a couple of ways. Finding the first known
+address and comparing it to the offsets on disk can potentially allow us to compute the ASLR offset.
+At this point we would need to account for these differences when comparing the disk vs memory code.</p>
+<p>Alternatively we could perform a likeness comparison between the code segments and determine some
+acceptable drift for detecting a hollowing attack.</p>
+<p>This is even further complicated by technologies like Windows-on-Windows 64, or WOW64, the subsystem
+for running 32-bit applications on 64-bit windows. This system actually ends up rewriting and shimming
+code in 32-bit applications which fundamentally changes them making comparison even more difficult.</p>
+<h2 id="inject-and-spawn">Inject and Spawn</h2>
+<p>This is a very common technique for running code in a remote process. The basic concept is that some
+executable code is written into allocated heap space in a running process. A new thread is then spawned
+in that process with the heap address as the starting location.</p>
+<p>If you have some ready made shellcode, this process is pretty simple:</p>
+<ul>
+<li>OpenProcess()</li>
+<li>VirtualAllocEx()</li>
+<li>WriteProcessMemory()</li>
+<li>CreateRemoteThread()</li>
+</ul>
+<p>If you don't have shellcode and want to execute something like a raw executable file, you will need to
+do some basic memory management to replicate loader functionality. This will assure any import addresses
+are correctly computed in accordance with ASLR and expected section offset locations.</p>
+<h3 id="detection-1">Detection</h3>
+<p>A common practice for finding injected executables is to look for the headers in places they should not
+be, such as heap space. This is how <code>malfind</code> in <a rel="external" href="https://volatilityfoundation.org/">volatility</a> works.
+Locating shellcode running in memory can be tricky, but looking at where current thread start locations
+will give a hint if the code section of a module or heap space was used.</p>
+<h2 id="dll-injection">DLL Injection</h2>
+<p>While this process is often referred to as "DLL Injection", that name is very
+windows-centric and it should be noted that this technique applies to any
+shared object format such as <code>.so</code> on linux or <code>.dyld</code> on macos.</p>
+<p>This process works by causing a running application to load a dynamic library of
+your choice and run it. This is similar to an "Inject and Spawn" attack but instead
+of writing program code we write a string containing the path to the library, and
+then execute a call to <code>LoadLibrary</code> inside the process using <code>CreateRemoteThread</code>.</p>
+<p>This attack is helpful for masking the activity of nefarious code inside a trusted
+application, but it requires the library to be on disk, thus exposing it to possible
+detection by security products inspecting data at rest.</p>
+<pre class="giallo" style="color-scheme: light dark; color: light-dark(#F6F6F4, #F8F8F2); background-color: light-dark(#282A36, #282A36);" ><code data-lang="rust"><span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">type</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> FnLoadLibraryA</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#F286C4, #FF79C6);"> unsafe</span><span style="color: light-dark(#F286C4, #FF79C6);"> extern</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">system</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#62E884, #50FA7B);"> fn</span><span>(</span><span>_</span><span style="color: light-dark(#F286C4, #FF79C6);">:</span><span style="color: light-dark(#F286C4, #FF79C6);"> *</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> c_void</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> -&gt;</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> u32</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> process</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#62E884, #50FA7B);"> OpenProcess</span><span>(</span><span style="color: light-dark(#BF9EEE, #BD93F9);">PROCESS_ALL_ACCESS</span><span>,</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span><span>,</span><span> pid</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> path</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> CString</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#62E884, #50FA7B);">new</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">r</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">c:\path\to\library.dll</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> c_path</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> CString</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#62E884, #50FA7B);">new</span><span>(</span><span>path</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">clone</span><span>(</span><span>)</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);">?</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> this gives us the memory location of the string</span></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> in the remote process</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> dll_path</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#62E884, #50FA7B);"> VirtualAllocEx</span><span>(</span></span>
+<span class="giallo-l"><span>    process</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span>    path</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">len</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">    MEM_COMMIT</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">    PAGE_READWRITE</span></span>
+<span class="giallo-l"><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> write the library path to the string location</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">if</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span><span style="color: light-dark(#F286C4, #FF79C6);"> ==</span><span style="color: light-dark(#62E884, #50FA7B);"> WriteProcessMemory</span><span>(</span></span>
+<span class="giallo-l"><span>    process</span><span>,</span></span>
+<span class="giallo-l"><span>    dll_path</span><span>,</span></span>
+<span class="giallo-l"><span>    c_path</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">as_ptr</span><span>(</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span> _</span><span>,</span></span>
+<span class="giallo-l"><span>    path</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">len</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span>)</span><span> {</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    panic!</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">Cannot write path to remote process</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> kernel32</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> CString</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#62E884, #50FA7B);">new</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">kernel32</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);">?</span><span>;</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> load_library</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> CString</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span style="color: light-dark(#62E884, #50FA7B);">new</span><span>(</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">LoadLibraryA</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);">?</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> get the function address of &quot;LoadLibraryA&quot;</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> load_library</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#62E884, #50FA7B);"> GetProcAddress</span><span>(</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    GetModuleHandleA</span><span>(</span><span>kernel32</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">as_ptr</span><span>(</span><span>)</span><span>)</span><span>,</span><span> load_library</span><span style="color: light-dark(#F286C4, #FF79C6);">.</span><span style="color: light-dark(#62E884, #50FA7B);">as_ptr</span><span>(</span><span>)</span></span>
+<span class="giallo-l"><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span style="color: light-dark(#F286C4, #FF79C6);"> mut</span><span> bad_thread</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> now we call &quot;LoadLibraryA()&quot; in the target</span></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> process and it will load the dll</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">let</span><span> thread</span><span style="color: light-dark(#F286C4, #FF79C6);"> =</span><span style="color: light-dark(#62E884, #50FA7B);"> CreateRemoteThread</span><span>(</span></span>
+<span class="giallo-l"><span>    process</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">    null_mut</span><span>(</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">    0</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;">    Some</span><span>(</span><span>std</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>mem</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>transmute</span><span style="color: light-dark(#F286C4, #FF79C6);">::</span><span>&lt;</span></span>
+<span class="giallo-l"><span>        _</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">        unsafe</span><span style="color: light-dark(#F286C4, #FF79C6);"> extern</span><span style="color: light-dark(#E7EE98, #F1FA8C);"> &quot;</span><span style="color: light-dark(#E7EE98, #F1FA8C);">system</span><span style="color: light-dark(#E7EE98, #F1FA8C);">&quot;</span><span style="color: light-dark(#F286C4, #FF79C6);"> fn</span><span>(</span><span style="color: light-dark(#F286C4, #FF79C6);">*</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> c_void</span><span>)</span><span style="color: light-dark(#F286C4, #FF79C6);"> -&gt;</span><span style="color: light-dark(#97E1F1, #8BE9FD);font-style: italic;"> u32</span><span>,</span></span>
+<span class="giallo-l"><span>    &gt;</span><span>(</span><span>load_library</span><span style="color: light-dark(#F286C4, #FF79C6);"> as</span><span style="color: light-dark(#F286C4, #FF79C6);"> *</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> c_void</span><span>)</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span>    dll_path</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#BF9EEE, #BD93F9);">    0</span><span>,</span></span>
+<span class="giallo-l"><span style="color: light-dark(#F286C4, #FF79C6);">    &amp;</span><span style="color: light-dark(#F286C4, #FF79C6);">mut</span><span> bad_thread</span><span>,</span></span>
+<span class="giallo-l"><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: light-dark(#7B7F8B, #6272A4);">//</span><span style="color: light-dark(#7B7F8B, #6272A4);"> simply wait for the call to &quot;LoadLibraryA()&quot; to complete</span></span>
+<span class="giallo-l"><span style="color: light-dark(#62E884, #50FA7B);">WaitForSingleObject</span><span>(</span><span>thread</span><span>,</span><span style="color: light-dark(#BF9EEE, #BD93F9);"> 0xFFFFFFFF</span><span>)</span><span>;</span></span></code></pre><h3 id="detection-2">Detection</h3>
+<p>Detecting library injection can be tricky, because it is valid for a running application to dynamically
+load a dependency. In <em>general</em>, an application will maintain an import table that will contain the
+functions to use from a dependency. Comparing the current loaded libraries with those referenced in
+the import table is one naive method for detecting an injection. However, if an application normally
+dynamically loads various libraries, these will not be listed in the import table to begin with, so this
+detection method falls apart.</p>
+<h2 id="module-stomping">Module Stomping</h2>
+<p>This is a fun mashup between library injection and process hollowing. The basic principals have
+already been covered. Here we are forcing a process to load a benign library, but before we call
+the entry function, we will overwrite it with our shellcode (or entire library if we wish).</p>
+<ul>
+<li>Get a process handle</li>
+<li>Allocate a string to the path we want to load in the process</li>
+<li>Call <code>LoadLibrary</code></li>
+<li>Overwrite the entry point function</li>
+<li>Call the entry point function</li>
+</ul>
+<h3 id="detection-3">Detection</h3>
+<p>Similar to process hollowing and module injection, finding stomped modules can be a bit of a chore.
+Determining if the module belongs in the process (via import table) is one first step (but not without
+its issues as described previously). Enumerating the loaded modules in the process then auditing the
+code segment with what is on disk is another solution. However, this can face similar relocation problems
+when 32bit &lt;-&gt; 64bit translations and patching happen.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Memory injection is a very interesting and useful technique for concealing execution of code.
+While detecting the use of these mechanisms can be tricky, understanding how they work can help
+in demystifying them. The term "file-less malware" came into vogue several years ago, but process
+injection has been a tactic in use for much longer than it has been present in the collective
+conscience of the security industry.</p>
+<p>Hopefully these simple demonstrations help someone to understand the basic methodologies for some
+popular memory injection techniques!</p>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+<footer class="mt-12 flex flex-col" tabindex="-1" accesskey="_">
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mr-1.5 mb-1.5 rounded-lg px-5 py-1.5">Tags</span>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/memory/">Memory</a>
+    
+    <a
+      class="block-bg block-hover mr-1.5 mb-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="../../tags/malware/">Malware</a>
+    
+  </div>
+</footer>
+
+  <!-- Post Nav -->
+<nav class="block-bg mt-12 flex flex-wrap rounded-lg text-lg">
+  <a
+    class="block-hover-mask flex min-w-[50%] grow items-center rounded-l-md p-6 pr-3 font-semibold no-underline"
+    href="../../blog/20240610-nix-and-back-again/" accesskey=","
+    ><span class="mr-1.5">&lsaquo;</span><span>NixOS and Back Again</span></a>
+  <a
+    class="block-hover-mask ml-auto flex min-w-[50%] grow items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline"
+    href="../../blog/20231101-safe-ffi-rust-memory/" accesskey="."
+    ><span>Safe Pointer Management With Rust</span><span class="ml-1.5">&rsaquo;</span></a>
+</nav>
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+    </main>
+    <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  <a rel="external" href="https://opensource.org/license/mit">© <time datetime="2026">2026</time> Russ Morris</a>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+  <span class="mr-6 lg:ml-6">
+    <a class="link" href="https://www.getzola.org/" target="_blank"
+      >Powered by Zola</a
+    >
+  </span>
+  <a class="link" href="https://github.com/russ/dracola" target="_blank"
+    >&#9998; Dracola</a
+  >
+</div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+ 
+
+    <!-- Begin Body End inject -->
+    
+    <!-- End Body End inject -->
+  </body>
+</html>
